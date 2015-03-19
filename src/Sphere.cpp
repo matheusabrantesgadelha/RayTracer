@@ -1,0 +1,38 @@
+#include "Sphere.hpp"
+
+Sphere::Sphere()
+{
+	scene = NULL;
+}
+
+Sphere::~Sphere()
+{
+}
+
+bool Sphere::rayCast( Ray _ray, RayHit& _hit )
+{
+	glm::vec3 origin_center = center - _ray.origin;
+	if( glm::dot( origin_center, _ray.direction ) <= 0 )
+		return false;
+
+	glm::vec3 proj_ray = glm::proj( origin_center, _ray.direction );
+	glm::vec3 proj_point = proj_ray + _ray.origin;
+	if( glm::length( center-proj_point ) > radius )
+		return false;
+
+	float distInter = sqrt( pow(radius,2) - pow(glm::length( proj_point - center ),2) );
+	float di = glm::length( proj_point - _ray.origin ) - distInter;
+
+	glm::vec3 intersection = _ray.origin + di*_ray.direction;
+	_hit.position = intersection;
+
+	//LightRay light_ray = lightRayCast( _hit.position );
+	_hit.color = material.diffuseColor;
+
+	return true;
+}
+
+glm::vec3 Sphere::getNormalAt( glm::vec3 _p )
+{
+	return glm::normalize( _p - center );
+}
