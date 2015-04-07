@@ -1,6 +1,8 @@
 #include "Scene.hpp"
 
-Scene::Scene()
+Scene::Scene() :
+    environmentColor(0,0,0)
+//    environmentColor(0.1,0.1,0.05)
 {
 }
 
@@ -34,7 +36,7 @@ bool Scene::rayCast( Ray _ray, RayHit& _hit )
 			{
 				hitDesc = _hit;
 				hitDesc.objId = o->id;
-				distanceFromHit = glm::length( hitDesc.position - _ray.origin );
+                hitDesc.distance = distanceFromHit = glm::length( hitDesc.position - _ray.origin );
 				firstHit = false;
 			}
 			else
@@ -43,7 +45,7 @@ bool Scene::rayCast( Ray _ray, RayHit& _hit )
 				{
 					hitDesc = _hit;
 					hitDesc.objId = o->id;
-					distanceFromHit = glm::length( hitDesc.position - _ray.origin );
+                    hitDesc.distance = distanceFromHit = glm::length( hitDesc.position - _ray.origin );
 				}
 			}
 		}
@@ -67,10 +69,67 @@ bool Scene::finalRayCast( Ray _ray, RayHit& _hit )
 		}
 		_hit.color = obj->material.combineColors( materialColor, reflectedColor );
 
-//		std::cout << _hit.color.r << " " << _hit.color.g << " " << _hit.color.b << std::endl;
 		return true;
 	}
 	
 	return false;
 }
 
+RGB Scene::pathCast( Ray _ray, RayHit& _hit, unsigned int bounces )
+{
+    if( bounces == 0 )
+	{
+        return environmentColor;
+    }
+    if( rayCast( _ray, _hit ) )
+	{
+		std::shared_ptr<Object> obj = objects[_hit.objId];
+        if( glm::length(obj->material.luminosity) > 0.00001 ) return obj->material.luminosity;
+        //RGB emittance = obj->material.luminosity * (1.0f/_hit.distance);
+
+        glm::vec3 randomVec = glm::sphericalRand(1.0f);
+        glm::vec3 dirOnNormEmiSphere =
+                glm::dot(randomVec, obj->getNormalAt(_hit.position)) > 0 ? randomVec : -randomVec ;
+
+        Ray randomRay;
+        randomRay.origin = _hit.position;
+        randomRay.direction = dirOnNormEmiSphere;
+
+        RGB lightRadiance(0,0,0);
+
+        for( auto lightSource : objects)
+        {
+            if( glm::length(lightSource->material.luminosity) > 0.0001f )
+            {
+                Ray rayToLight;
+                rayToLight.origin = _hit.position;
+                rayToLight.direction = glm::normalize( lightSource->center - _hit.position );
+
+                RayHit lightHit;
+
+                if( rayCast( rayToLight, lightHit ) )
+                {
+                    if( lightHit.objId == lightSource->id )
+                    {
+                        lightRadiance = 2.0f * obj->material.diffuseColor *
+                                glm::dot(rayToLight.direction, obj->getNormalAt(_hit.position));
+                        lightRadiance *= (1.0f/lightHit.distance) * lightSource->material.power;
+                    }
+                }
+            }
+        }
+
+        float cosTheta = glm::dot(randomRay.direction, obj->getNormalAt(_hit.position));
+        RGB BRDF = 2.0f * obj->material.diffuseColor * cosTheta;
+
+        RayHit newHit;
+        RGB reflected = pathCast( randomRay, newHit, bounces-1 );
+//        reflected *= 10.0f/newHit.distance;
+
+//        lightRadiance = RGB(0,0,0);
+
+        return glm::clamp(reflected*BRDF + 0.1f*lightRadiance,0.f,1.f);
+    }
+	
+    return environmentColor;
+}

@@ -2,7 +2,7 @@
 
 Material::Material()
 	:diffuseColor( RGB(0,0,0) ), specularColor( RGB(1,1,1) ),
-	luminosity(RGB(0,0,0)), shininess( 5.0f ), reflectiveness( 0.1 )
+    luminosity(RGB(0,0,0)), power(3), shininess( 5.0f ), reflectiveness( 0.1 )
 {
 }
 
@@ -23,7 +23,7 @@ RGB Material::calcIllumination( const glm::vec3 _normal, const LightRay _light, 
 
 	result = glm::clamp( result, 0.0f, 1.0f );
 
-	return result;
+	return result+luminosity;
 }
 
 RGB Material::combineColors( const RGB material, const RGB reflected )

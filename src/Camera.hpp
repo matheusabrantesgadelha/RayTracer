@@ -16,7 +16,7 @@ class Camera
 public:
 	Camera(const unsigned int _res_width, const unsigned int _res_height);
 	~Camera();
-	void render( Scene& _scene );
+	virtual void render( Scene& _scene );
 
 	glm::vec3 position;
 	glm::vec3 lookAt;
@@ -26,12 +26,13 @@ public:
 	float focalDistance;
 	Image<RGB> image;
 
-private:
-	void buildRays();
-	float aspect;
-	std::vector< std::vector<Ray> > rays;
+protected:
+    void buildRays();
+    std::vector< std::vector<Ray> > rays;
 
-	
+
+private:
+	float aspect;
 };
 
 #endif

@@ -22,6 +22,7 @@ struct RayHit
 	glm::vec3 position;
 	RGB color;
 	RGB luminosity;
+    float distance;
 	unsigned int objId;
 };
 

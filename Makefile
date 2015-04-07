@@ -1,10 +1,10 @@
 CC = g++
 
-CFLAGS = -Wall -std=c++11 -ggdb
+CFLAGS = -Wall -std=c++11 -ggdb -O3
 
 INCLUDES = -Iglm
 
-OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o
+OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o PathTraceCamera.o
 
 all: src/main.cpp $(OBJS)
 	$(CC) $(CFLAGS) src/main.cpp $(OBJS) -o bin/main $(INCLUDES)
@@ -14,6 +14,9 @@ ImageWriter.o: src/ImageWriter.cpp
 
 Camera.o: src/Camera.cpp
 	$(CC) $(CFLAGS) -c src/Camera.cpp $(INCLUDES)
+
+PathTraceCamera.o: src/PathTraceCamera.cpp
+	$(CC) $(CFLAGS) -c src/PathTraceCamera.cpp $(INCLUDES)
 
 Scene.o: src/Scene.cpp
 	$(CC) $(CFLAGS) -c src/Scene.cpp $(INCLUDES)

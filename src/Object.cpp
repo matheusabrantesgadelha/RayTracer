@@ -18,12 +18,18 @@ RGB Object::computeLight( const glm::vec3 _pos, const glm::vec3 _view )
 				{
 					light.color = o->material.luminosity;
 					light.direction = ray_dir; 
+
+					float dist_hit = glm::length( hit.position - _pos );
+					float distance_atten = 1/(pow( dist_hit, 2) + pow(dist_hit,3) + dist_hit);
+					light.color *= distance_atten;
+					light.color *= o->material.power;
+
 					finalColor += material.calcIllumination( getNormalAt( _pos ), light, _view );
 				}
 			}
 		}
 	}
-	return finalColor;
+	return finalColor + material.luminosity;
 }
 
 RGB Object::computeReflection( const glm::vec3 _pos, const glm::vec3 _view )

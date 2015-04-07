@@ -17,6 +17,7 @@ class Material
 		RGB diffuseColor;
 		RGB specularColor;
 		RGB luminosity;
+		float power;
 		float shininess;
 		float reflectiveness;
 };
