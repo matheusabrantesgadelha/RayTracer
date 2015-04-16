@@ -1,6 +1,6 @@
 #include "Sphere.hpp"
 
-Sphere::Sphere()
+Sphere::Sphere() : Object()
 {
 	scene = NULL;
 }
@@ -27,12 +27,19 @@ bool Sphere::rayCast( Ray _ray, RayHit& _hit )
 	_hit.position = intersection;
 
 	//LightRay light_ray = lightRayCast( _hit.position );
-	_hit.color = material.diffuseColor;
+    _hit.color = material->diffuseColor;
 
 	return true;
 }
 
 glm::vec3 Sphere::getNormalAt( glm::vec3 _p )
 {
-	return glm::normalize( _p - center );
+    return glm::normalize( _p - center );
+}
+
+glm::vec3 Sphere::getRandomSurfacePoint()
+{
+    glm::vec3 randSurf = glm::sphericalRand(this->radius);
+
+    return randSurf + center;
 }

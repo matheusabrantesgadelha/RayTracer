@@ -1,5 +1,8 @@
 #include "Object.hpp"
 
+Object::Object() : material( new Material() )
+{}
+
 RGB Object::computeLight( const glm::vec3 _pos, const glm::vec3 _view )
 {
 	LightRay light;
@@ -7,7 +10,7 @@ RGB Object::computeLight( const glm::vec3 _pos, const glm::vec3 _view )
 
 	for( auto o : scene->objects )
 	{
-		if( glm::length(o->material.luminosity) >= 0.00001 && o->id != this->id )
+        if( glm::length(o->material->luminosity) >= 0.00001 && o->id != this->id )
 		{
 			RayHit hit;
 			glm::vec3 ray_dir(glm::normalize( o->center-_pos ));
@@ -16,20 +19,20 @@ RGB Object::computeLight( const glm::vec3 _pos, const glm::vec3 _view )
 			{
 				if( hit.objId == o->id )
 				{
-					light.color = o->material.luminosity;
+                    light.color = o->material->luminosity;
 					light.direction = ray_dir; 
 
 					float dist_hit = glm::length( hit.position - _pos );
 					float distance_atten = 1/(pow( dist_hit, 2) + pow(dist_hit,3) + dist_hit);
 					light.color *= distance_atten;
-					light.color *= o->material.power;
+                    light.color *= o->material->power;
 
-					finalColor += material.calcIllumination( getNormalAt( _pos ), light, _view );
+                    finalColor += material->calcIllumination( getNormalAt( _pos ), light, _view );
 				}
 			}
 		}
 	}
-	return finalColor + material.luminosity;
+    return finalColor + material->luminosity;
 }
 
 RGB Object::computeReflection( const glm::vec3 _pos, const glm::vec3 _view )

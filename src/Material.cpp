@@ -30,3 +30,11 @@ RGB Material::combineColors( const RGB material, const RGB reflected )
 {
 	return material + reflectiveness*reflected;
 }
+
+glm::vec3 Material::brdf(const glm::vec3 normal, const glm::vec3 light)
+{
+    glm::vec3 randomVec = glm::sphericalRand(1.0f);
+    glm::vec3 diffuseOut = glm::dot(randomVec,normal) < 0 ? -randomVec : randomVec;
+
+    return diffuseOut;
+}

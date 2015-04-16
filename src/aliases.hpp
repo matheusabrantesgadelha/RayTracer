@@ -6,8 +6,12 @@
 
 #include "glm.hpp"
 
+//#include "Material.hpp"
+
 typedef glm::vec3 RGB;
 typedef glm::vec4 RGBA; 
+
+class Material;
 
 struct Ray
 {
@@ -22,8 +26,10 @@ struct RayHit
 	glm::vec3 position;
 	RGB color;
 	RGB luminosity;
+    RGB radiance;
     float distance;
 	unsigned int objId;
+    std::shared_ptr<Material> material;
 };
 
 struct LightRay

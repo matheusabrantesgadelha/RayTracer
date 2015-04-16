@@ -9,6 +9,7 @@
 
 #include "glm.hpp"
 #include "gtx/projection.hpp"
+#include "gtc/random.hpp"
 
 #include "aliases.hpp"
 #include "Object.hpp"
@@ -22,6 +23,7 @@ public:
 
 	virtual bool rayCast( Ray _ray, RayHit& _hit );
 	virtual glm::vec3 getNormalAt( glm::vec3 _p );
+    virtual glm::vec3 getRandomSurfacePoint();
 
 	float radius;
 };

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 #include "glm.hpp"
 #include "gtc/random.hpp"
@@ -21,10 +22,23 @@ public:
 	void addObject( std::shared_ptr<Object> _obj );
 	bool rayCast( Ray _ray, RayHit& _hit);
     RGB pathCast(Ray _ray, RayHit& _hit, unsigned int bounces);
-	bool finalRayCast( Ray _ray, RayHit& _hit);
+    RGB bidirectionalPathCast( Ray _ray, RayHit& _hit );
+	bool finalRayCast( Ray _ray, RayHit& _hit);    
 
 	std::vector< std::shared_ptr<Object> > objects;
+    std::vector< std::shared_ptr<Object> > lights;
     RGB environmentColor;
+
+    void setLightBounces( int _numBounces );
+    void setLightPathSize( const unsigned int _lightPathSize);
+    void setCameraPathSize( const unsigned int _cameraPathSize);
+
+private:
+    void computePath(Ray _orgRay, std::vector<RayHit>& _path , unsigned int _bounces, RGB _lightColor);
+
+    unsigned int lightBounces;
+    unsigned int lightPathSize;
+    unsigned int cameraPathSize;
 	
 };
 
