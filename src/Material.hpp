@@ -3,10 +3,13 @@
 
 #include <iostream>
 #include <cmath>
+#include <functional>
 
 #include "gtc/random.hpp"
 
 #include "aliases.hpp"
+
+glm::vec3 diffuseBRDF( const glm::vec3 _normal, const glm::vec3 _light );
 
 /**
  * @brief The Material class. Represents a material.
@@ -35,7 +38,7 @@ class Material
          * @param reflected
          * @return Final color after combining material color and reflected lights
          */
-		RGB combineColors( const RGB material, const RGB reflected );
+        RGB combineColors( const RGB material, const RGB reflected );
 
         /**
          * @brief brdf Returns an outgoing light considering brdf
@@ -44,6 +47,8 @@ class Material
          * @return Outgoing light direction
          */
         glm::vec3 brdf( const glm::vec3 normal, const glm::vec3 light );
+
+        std::function< glm::vec3( const glm::vec3, const glm::vec3 ) > func_brdf;
 		
         /**
          * @brief diffuseColor Diffuse color of the surface

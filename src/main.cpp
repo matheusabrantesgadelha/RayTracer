@@ -15,6 +15,12 @@
 
 //#define RELEASE
 
+glm::vec3 mirrorBRDF( const glm::vec3 _normal, const glm::vec3 _light )
+{
+    glm::vec3 reflectedLight = glm::reflect( _light, _normal );
+    return reflectedLight;
+}
+
 int main( int argc, char** argv )
 {
 #ifdef RELEASE
@@ -32,7 +38,7 @@ int main( int argc, char** argv )
 	std::cout << "RayTracer v0.1" << std::endl;
 	std::cout << "Rendering scene..." << std::endl;
 
-    PathTraceCamera camera( 640, 480, 100 );
+    PathTraceCamera camera( 640, 480, 300 );
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
     camera.focalDistance = 6.0f;
     camera.position += glm::vec3( 0,0, 35 );
@@ -40,7 +46,7 @@ int main( int argc, char** argv )
 	std::shared_ptr<Scene> scene( new Scene() );
 
 	std::shared_ptr<Sphere> light( new Sphere() );
-    light->center = glm::vec3( 0, 38, -20);
+    light->center = glm::vec3( 0, 40, -20);
     light->radius = 6.0f;
     light->material->diffuseColor = RGB(1,1,1);
     light->material->luminosity = RGB(1,1,1);
@@ -55,6 +61,7 @@ int main( int argc, char** argv )
     sphere2->center = glm::vec3( -28, -30, -30 );
     sphere2->radius = 8.0f;
     sphere2->material->diffuseColor = RGB(1.0,1.0,1.0);
+    sphere2->material->func_brdf = mirrorBRDF;
 
 	std::shared_ptr<Sphere> backWall( new Sphere() );
 	backWall->center = glm::vec3( 0, 0, -100050 );

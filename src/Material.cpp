@@ -1,9 +1,18 @@
 #include "Material.hpp"
 
+glm::vec3 diffuseBRDF(const glm::vec3 _normal, const glm::vec3 _light)
+{
+    glm::vec3 randomVec = glm::sphericalRand(1.0f);
+    glm::vec3 diffuseOut = glm::dot(randomVec,_normal) < 0 ? -randomVec : randomVec;
+
+    return diffuseOut;
+}
+
 Material::Material()
-	:diffuseColor( RGB(0,0,0) ), specularColor( RGB(1,1,1) ),
+    :diffuseColor( RGB(0,0,0) ), specularColor( RGB(1,1,1) ),
     luminosity(RGB(0,0,0)), power(3), shininess( 5.0f ), reflectiveness( 0.1 )
 {
+    func_brdf = diffuseBRDF;
 }
 
 Material::~Material(){}
