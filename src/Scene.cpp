@@ -97,10 +97,9 @@ bool Scene::finalRayCast( Ray _ray, RayHit& _hit )
 	return false;
 }
 
-void Scene::computePath(Ray _orgRay, std::vector<RayHit>& _path, unsigned int _bounces, RGB _lightColor)
+void Scene::computePath(Ray _orgRay, std::vector<RayHit>& _path, unsigned int _bounces)
 {
     Ray ray = _orgRay;
-    RGB color = _lightColor;
     for( unsigned int i=0; i<_bounces; ++i )
     {
         RayHit newHit;
@@ -108,15 +107,23 @@ void Scene::computePath(Ray _orgRay, std::vector<RayHit>& _path, unsigned int _b
         {
             if( glm::length(objects[newHit.objId]->material->luminosity) > 0.001f )
             {
-                color = newHit.radiance = objects[newHit.objId]->material->luminosity;
+                newHit.radiance = objects[newHit.objId]->material->luminosity;
                 _path.push_back( newHit );
-                break;
+                continue;
             }
-            newHit.radiance = 2.0f * //1.0f/newHit.distance *
-                    std::max(glm::dot( ray.direction, -objects[newHit.objId]->getNormalAt( newHit.position ) ),0.0f) *
-                    color * newHit.material->diffuseColor;
 
-            color = newHit.radiance;
+            if( _path.size() == 0)
+            {
+                newHit.radiance = newHit.material->diffuseColor;
+            }
+
+            else{
+                newHit.radiance = 2.0f * //1.0f/newHit.distance *
+                        std::max(glm::dot( ray.direction, -objects[newHit.objId]->getNormalAt( newHit.position ) ),0.0f) *
+                        newHit.material->diffuseColor;
+
+                newHit.radiance *= _path[_path.size()-1].radiance;
+            }
 
             _path.push_back( newHit );
 
@@ -124,7 +131,7 @@ void Scene::computePath(Ray _orgRay, std::vector<RayHit>& _path, unsigned int _b
             newRay.origin = newHit.position;
             newRay.direction = newHit.material->func_brdf(
                         objects[newHit.objId]->getNormalAt( newHit.position ),
-                        ray.direction );
+                    ray.direction );
             ray = newRay;
         }
         else
@@ -145,22 +152,22 @@ RGB Scene::bidirectionalPathCast(Ray _ray, RayHit &_hit)
         {
             std::vector<RayHit> lightPath;
             RayHit orgHit;
-            orgHit.radiance = light->material->luminosity;
-            orgHit.position = light->center;
+            orgHit.radiance = light->material->luminosity * light->material->power;
+            orgHit.position = light->getRandomSurfacePoint();
             orgHit.objId = light->id;
 
             lightPath.push_back(orgHit);
 
             Ray initialRay;
-            initialRay.origin = light->getRandomSurfacePoint();
+            initialRay.origin = orgHit.position ;
             initialRay.direction = glm::normalize(initialRay.origin - light->center);
-            computePath( initialRay, lightPath, lightBounces, light->material->luminosity * light->material->power );
+            computePath( initialRay, lightPath, lightBounces );
 
             lightHits.push_back(lightPath);
         }
     }
 
-    computePath( _ray, cameraHits, lightBounces, RGB(0,0,0) );
+    computePath( _ray, cameraHits, lightBounces );
 
     RGB finalColor;
     float numFactors;
@@ -189,7 +196,7 @@ RGB Scene::bidirectionalPathCast(Ray _ray, RayHit &_hit)
                 {
                     glm::vec3 normal = objects[cameraHit.objId]->getNormalAt(cameraHit.position);
                     finalColor += 2.0f * //1.0f/shadowHit.distance *
-                            std::max(glm::dot(shadowRay.direction, normal),0.0f) * cameraHit.material->diffuseColor * lightHit.radiance;
+                            std::max(glm::dot(shadowRay.direction, normal),0.0f) * cameraHit.radiance * lightHit.radiance;
 
 //                    std::cout <<"FINAL COLOR: " << finalColor.r << " " << finalColor.g << " " << finalColor.b << std::endl;
 //                    std::cout <<"RADIANCE: " << lightHit.radiance.r << " " << lightHit.radiance.g << " " << lightHit.radiance.b << std::endl;

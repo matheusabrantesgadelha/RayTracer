@@ -46,7 +46,7 @@ int main( int argc, char** argv )
 	std::shared_ptr<Scene> scene( new Scene() );
 
 	std::shared_ptr<Sphere> light( new Sphere() );
-    light->center = glm::vec3( 0, 40, -20);
+    light->center = glm::vec3( 0, 44, -20);
     light->radius = 6.0f;
     light->material->diffuseColor = RGB(1,1,1);
     light->material->luminosity = RGB(1,1,1);
@@ -59,7 +59,7 @@ int main( int argc, char** argv )
 
 	std::shared_ptr<Sphere> sphere2( new Sphere() );
     sphere2->center = glm::vec3( -28, -30, -30 );
-    sphere2->radius = 8.0f;
+    sphere2->radius = 10.0f;
     sphere2->material->diffuseColor = RGB(1.0,1.0,1.0);
     sphere2->material->func_brdf = mirrorBRDF;
 
@@ -76,12 +76,12 @@ int main( int argc, char** argv )
 	std::shared_ptr<Sphere> leftWall( new Sphere() );
 	leftWall->center = glm::vec3( -100040, 0, 0);
 	leftWall->radius = 100000.0f;
-    leftWall->material->diffuseColor = RGB(1,0,0);
+    leftWall->material->diffuseColor = RGB(0.9,0.1,0.1);
 
 	std::shared_ptr<Sphere> rightWall( new Sphere() );
 	rightWall->center = glm::vec3( 100040, 0, 0);
 	rightWall->radius = 100000.0f;
-    rightWall->material->diffuseColor = RGB(0,1,0);
+    rightWall->material->diffuseColor = RGB(0.1,0.9,0.1);
 
 	std::shared_ptr<Sphere> roof( new Sphere() );
 	roof->center = glm::vec3( 0, 100040, 0);

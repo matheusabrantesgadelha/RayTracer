@@ -34,7 +34,7 @@ public:
     void setCameraPathSize( const unsigned int _cameraPathSize);
 
 private:
-    void computePath(Ray _orgRay, std::vector<RayHit>& _path , unsigned int _bounces, RGB _lightColor);
+    void computePath(Ray _orgRay, std::vector<RayHit>& _path , unsigned int _bounces);
 
     unsigned int lightBounces;
     unsigned int lightPathSize;

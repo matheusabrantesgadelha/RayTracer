@@ -3,6 +3,8 @@
 
 #include "Camera.hpp"
 
+#include "gtc/random.hpp"
+
 /**
  * @brief The PathTraceCamera class. Extends Camera class to provide Path Tracing.
  */
@@ -37,6 +39,11 @@ private:
      * @brief bounces Number of bounces a path can have
      */
     unsigned int bounces;
+
+    /**
+     * @brief deltaDisplacement amount of displacement to apply to different rays from the same pixel
+     */
+    float deltaDisplacement;
 };
 
 #endif
