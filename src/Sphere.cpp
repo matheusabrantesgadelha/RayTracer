@@ -26,7 +26,7 @@ bool Sphere::rayCast( Ray _ray, RayHit& _hit )
 	glm::vec3 intersection = _ray.origin + di*_ray.direction;
 	_hit.position = intersection;
 
-    _hit.color = material->diffuseColor;
+    _hit.color = material->albedo;
 
 	return true;
 }

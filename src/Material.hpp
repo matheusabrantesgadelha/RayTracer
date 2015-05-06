@@ -6,10 +6,15 @@
 #include <functional>
 
 #include "gtc/random.hpp"
+#include "gtc/constants.hpp"
 
 #include "aliases.hpp"
 
-glm::vec3 diffuseBRDF( const glm::vec3 _normal, const glm::vec3 _light );
+glm::vec3 diffuseSampling( const glm::vec3 _normal, const glm::vec3 _light );
+
+RGB diffuseBRDF(const glm::vec3 _in, const glm::vec3 _out, const glm::vec3 _normal,  Material _m);
+
+const float POW_PI_MINUS_1 = 1.0f/glm::pi<float>();
 
 /**
  * @brief The Material class. Represents a material.
@@ -46,14 +51,16 @@ class Material
          * @param light Light direction of incoming light
          * @return Outgoing light direction
          */
-        glm::vec3 brdf( const glm::vec3 normal, const glm::vec3 light );
+        std::function< RGB( const glm::vec3, const glm::vec3, const glm::vec3, Material ) > customBRDF;
 
-        std::function< glm::vec3( const glm::vec3, const glm::vec3 ) > func_brdf;
+        RGB BRDF( const glm::vec3, const glm::vec3, const glm::vec3 );
+
+        std::function< glm::vec3( const glm::vec3, const glm::vec3 ) > reflectionSample;
 		
         /**
          * @brief diffuseColor Diffuse color of the surface
          */
-		RGB diffuseColor;
+        RGB albedo;
         /**
          * @brief specularColor Specular color of the surface
          */
@@ -61,7 +68,7 @@ class Material
         /**
          * @brief luminosity Light emission of the surface
          */
-		RGB luminosity;
+        RGB emmitance;
         /**
          * @brief power Power of the emitted light
          */

@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <algorithm>
+#include <cmath>
 
 #include "Image.hpp"
 #include "aliases.hpp"

@@ -26,7 +26,11 @@ struct RayHit
 	glm::vec3 position;
 	RGB color;
 	RGB luminosity;
-    RGB radiance;
+    RGB incomingRadiance;
+    RGB irradiance;
+    glm::vec3 geoTerm;
+    glm::vec3 inDirection;
+    glm::vec3 brdf;
     float distance;
 	unsigned int objId;
     std::shared_ptr<Material> material;

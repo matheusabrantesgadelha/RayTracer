@@ -18,6 +18,7 @@ void PathTraceCamera::render(Scene _scene)
 
     glm::vec3 sideVec = glm::normalize( glm::cross( lookAt, up ));
 
+    #pragma omp parallel for schedule(dynamic, 7)
     for( unsigned int i=0; i < rays.size(); ++i )
 	{
 		for( unsigned int j=0; j < rays[i].size(); ++j )

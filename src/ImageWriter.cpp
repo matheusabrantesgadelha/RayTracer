@@ -20,9 +20,9 @@ void ImageWriter::writeOnPPM( const std::string _imagepath )
 	for( unsigned int i = 0; i < image.data.size(); ++i ){
 		for( unsigned int j = 0; j < image.data[i].size(); ++j ){
 			RGB color = image.data[i][j];
-			file << std::min((int)(color.r * colorGamut), colorGamut) << " " 
-				 << std::min((int)(color.g * colorGamut), colorGamut) << " " 
-				 << std::min((int)(color.b * colorGamut), colorGamut) << " ";
+            file << std::min((int)(pow(color.r,1/2.2) * colorGamut + .5), colorGamut) << " "
+                 << std::min((int)(pow(color.g,1/2.2) * colorGamut + .5), colorGamut) << " "
+                 << std::min((int)(pow(color.b,1/2.2) * colorGamut + .5), colorGamut) << " ";
 		}
 	}
 

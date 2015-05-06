@@ -17,6 +17,7 @@ public:
     virtual glm::vec3 getRandomSurfacePoint() = 0;
 	RGB computeLight( const glm::vec3 _pos, const glm::vec3 _view );
 	RGB computeReflection( const glm::vec3 _pos, const glm::vec3 _view );
+    bool isLight();
 
 	unsigned int id;
 	std::shared_ptr<Scene> scene;

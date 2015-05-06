@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -Wall -std=c++11 -ggdb -O3
+CFLAGS = -Wall -std=c++11 -ggdb -O3 -fopenmp
 
 INCLUDES = -Iglm
 
