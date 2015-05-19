@@ -17,16 +17,16 @@ class Object;
 class Scene : public std::enable_shared_from_this<Scene>
 {
 public:
-	Scene();
-	~Scene();
-	std::shared_ptr<Scene> getptr();
-	void addObject( std::shared_ptr<Object> _obj );
-	bool rayCast( Ray _ray, RayHit& _hit);
+    Scene();
+    ~Scene();
+    std::shared_ptr<Scene> getptr();
+    void addObject( std::shared_ptr<Object> _obj );
+    bool rayCast( Ray _ray, RayHit& _hit);
     RGB pathCast(Ray _ray, RayHit& _hit, unsigned int bounces);
-    RGB bidirectionalPathCast( Ray _ray, RayHit& _hit );
-	bool finalRayCast( Ray _ray, RayHit& _hit);    
+    RGB bidirectionalPathCast( Ray _ray );
+    bool finalRayCast( Ray _ray, RayHit& _hit);
 
-	std::vector< std::shared_ptr<Object> > objects;
+    std::vector< std::shared_ptr<Object> > objects;
     std::vector< std::shared_ptr<Object> > lights;
     RGB environmentColor;
 
@@ -41,7 +41,7 @@ private:
     unsigned int lightBounces;
     unsigned int lightPathSize;
     unsigned int cameraPathSize;
-	
+
 };
 
 #endif

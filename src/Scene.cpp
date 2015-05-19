@@ -3,8 +3,8 @@
 Scene::Scene() :
     environmentColor(0,0,0),
 //    environmentColor(0.2,0.2,0.15),
-    lightPathSize(2),
-    cameraPathSize(2)
+    lightPathSize(3),
+    cameraPathSize(3)
 {
 }
 
@@ -15,9 +15,9 @@ Scene::~Scene()
 void Scene::addObject( std::shared_ptr<Object> _obj )
 {
 
-	_obj->id = objects.size();
-	_obj->scene = getptr();
-	objects.push_back( _obj );
+    _obj->id = objects.size();
+    _obj->scene = getptr();
+    objects.push_back( _obj );
 
     if( glm::length(_obj->material->emmitance) > 0.0001f )
         lights.push_back( _obj );
@@ -27,41 +27,43 @@ void Scene::addObject( std::shared_ptr<Object> _obj )
 
 std::shared_ptr<Scene> Scene::getptr()
 {
-	return shared_from_this();
+    return shared_from_this();
 }
 
 bool Scene::rayCast( Ray _ray, RayHit& _hit )
 {
-	bool firstHit = true;
-	RayHit hitDesc;
-	float distanceFromHit = 0.0f;
-	for( auto o : objects )
-	{
-		if( o->rayCast( _ray, _hit ) )
-		{
-			if( firstHit )
-			{
-				hitDesc = _hit;
-				hitDesc.objId = o->id;
+    bool firstHit = true;
+    RayHit hitDesc;
+    float distanceFromHit = 0.0f;
+    for( auto o : objects )
+    {
+        if( o->rayCast( _ray, _hit ) )
+        {
+            if( firstHit )
+            {
+                hitDesc = _hit;
+                hitDesc.objId = o->id;
                 hitDesc.distance = distanceFromHit = glm::length( hitDesc.position - _ray.origin );
                 hitDesc.material = o->material;
-				firstHit = false;
-			}
-			else
-			{
-				if( glm::length( _ray.origin - _hit.position ) < distanceFromHit )
-				{
-					hitDesc = _hit;
-					hitDesc.objId = o->id;
+                hitDesc.obj = o;
+                firstHit = false;
+            }
+            else
+            {
+                if( glm::length( _ray.origin - _hit.position ) < distanceFromHit )
+                {
+                    hitDesc = _hit;
+                    hitDesc.objId = o->id;
                     hitDesc.distance = distanceFromHit = glm::length( hitDesc.position - _ray.origin );
                     hitDesc.material = o->material;
+                    hitDesc.obj = o;
                 }
-			}
-		}
-	}
-	_hit = hitDesc;
-	if( distanceFromHit > 0.0f ) return true;
-	return false;
+            }
+        }
+    }
+    _hit = hitDesc;
+    if( distanceFromHit > 0.0f ) return true;
+    return false;
 }
 
 void Scene::setLightBounces(int _numBounces)
@@ -81,22 +83,22 @@ void Scene::setLightPathSize(const unsigned int _lightPathSize)
 
 bool Scene::finalRayCast( Ray _ray, RayHit& _hit )
 {
-	if( rayCast( _ray, _hit ) )
-	{
-		std::shared_ptr<Object> obj = objects[_hit.objId];
-		RGB materialColor = obj->computeLight( _hit.position, _ray.direction );
-		RGB reflectedColor( 0,0,0 );
-		
+    if( rayCast( _ray, _hit ) )
+    {
+        std::shared_ptr<Object> obj = objects[_hit.objId];
+        RGB materialColor = obj->computeLight( _hit.position, _ray.direction );
+        RGB reflectedColor( 0,0,0 );
+
         if( obj->material->reflectiveness > 0.0f )
-		{
-			reflectedColor = obj->computeReflection( _hit.position, _ray.direction );
-		}
+        {
+            reflectedColor = obj->computeReflection( _hit.position, _ray.direction );
+        }
         _hit.color = obj->material->combineColors( materialColor, reflectedColor );
 
-		return true;
-	}
-	
-	return false;
+        return true;
+    }
+
+    return false;
 }
 
 void Scene::computeCameraPath(Ray _orgRay, std::vector<RayHit> &_path, unsigned int _bounces)
@@ -108,16 +110,16 @@ void Scene::computeCameraPath(Ray _orgRay, std::vector<RayHit> &_path, unsigned 
         if(rayCast( ray, newHit ))
         {
             newHit.inDirection = ray.direction;
-            glm::vec3 normal = -objects[newHit.objId]->getNormalAt( newHit.position );
+            glm::vec3 normal = -newHit.obj->getNormalAt( newHit.position );
 
             Ray newRay;
-            newRay.origin = newHit.position;            
+            newRay.origin = newHit.position;
             newRay.direction = newHit.material->reflectionSample( normal, ray.direction );
 
             float cosTheta = std::abs(glm::dot(normal, newRay.direction));
             newHit.brdf = newHit.material->BRDF( newHit.inDirection, newRay.direction, normal );
             newHit.geoTerm = cosTheta*newHit.material->BRDF( newHit.inDirection, newRay.direction, normal );
-            if( objects[newHit.objId]->isLight() )  newHit.geoTerm = newHit.material->emmitance * newHit.material->power;
+            if( newHit.obj->isLight() )  newHit.geoTerm = newHit.material->emmitance * newHit.material->power;
 
             if( _path.size() > 0)
             {
@@ -145,19 +147,19 @@ void Scene::computeLightPath(Ray _orgRay, std::vector<RayHit>& _path, unsigned i
         {
             newHit.inDirection = ray.direction;
 
-            glm::vec3 surfNormal = -objects[newHit.objId]->getNormalAt( newHit.position );
+            glm::vec3 surfNormal = -newHit.obj->getNormalAt( newHit.position );
             float cosTheta = std::max(glm::dot( ray.direction, surfNormal ),0.0f);
             newHit.incomingRadiance = cosTheta *
-                    (_path[i].material->BRDF( _path[i].inDirection, ray.direction, surfNormal ) * _path[i].incomingRadiance
-                     + _path[i].material->emmitance *_path[i].material->power);
+                                      (_path[i].material->BRDF( _path[i].inDirection, ray.direction, surfNormal ) * _path[i].incomingRadiance
+                                       + _path[i].material->emmitance *_path[i].material->power);
 
             _path.push_back( newHit );
 
             Ray newRay;
             newRay.origin = newHit.position;
             newRay.direction = newHit.material->reflectionSample(
-                        objects[newHit.objId]->getNormalAt( newHit.position ),
-                    ray.direction );
+                                   newHit.obj->getNormalAt( newHit.position ),
+                                   ray.direction );
             ray = newRay;
         }
         else
@@ -167,7 +169,7 @@ void Scene::computeLightPath(Ray _orgRay, std::vector<RayHit>& _path, unsigned i
     }
 }
 
-RGB Scene::bidirectionalPathCast(Ray _ray, RayHit &_hit)
+RGB Scene::bidirectionalPathCast(Ray _ray)
 {
     std::vector<RayHit> cameraHits;
     std::vector< std::vector<RayHit> > lightHits;
@@ -209,19 +211,20 @@ RGB Scene::bidirectionalPathCast(Ray _ray, RayHit &_hit)
         {
             for( auto lightHit : lightPath )
             {
-                glm::vec3 normal = objects[cameraHit.objId]->getNormalAt(cameraHit.position);
-                numFactors += cameraHit.material->BRDF( cameraHit.inDirection, shadowRay.direction, normal);
 
                 shadowRay.origin = cameraHit.position;
                 shadowRay.direction = glm::normalize( lightHit.position - shadowRay.origin );
 
+                glm::vec3 normal = cameraHit.obj->getNormalAt(cameraHit.position);
+                numFactors += cameraHit.material->BRDF( cameraHit.inDirection, shadowRay.direction, normal);
+
                 RayHit shadowHit;
 
-                if( rayCast(shadowRay,shadowHit) && shadowHit.objId == lightHit.objId )
+                if( rayCast(shadowRay,shadowHit) && shadowHit.obj == lightHit.obj )
                 {
                     float cosTheta = std::max(glm::dot(shadowRay.direction, normal),0.0f);
                     finalColor += lightHit.material->BRDF( lightHit.inDirection, shadowRay.direction, normal)
-                            * cameraHit.geoTerm * cosTheta * lightHit.incomingRadiance;
+                                  * cameraHit.geoTerm * cosTheta * lightHit.incomingRadiance;
                 }
 //                std::cout << "cameraHit.brdf: " << cameraHit.brdf.r << " " << cameraHit.brdf.g << " " << cameraHit.brdf.b << std::endl;
 
@@ -235,5 +238,5 @@ RGB Scene::bidirectionalPathCast(Ray _ray, RayHit &_hit)
 
 RGB Scene::pathCast( Ray _ray, RayHit& _hit, unsigned int bounces )
 {
-    return bidirectionalPathCast( _ray, _hit );
+    return bidirectionalPathCast( _ray);
 }

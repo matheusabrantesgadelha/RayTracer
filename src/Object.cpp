@@ -49,7 +49,7 @@ RGB Object::computeReflection( const glm::vec3 _pos, const glm::vec3 _view )
         if( scene->rayCast( ray, hit ) )
         {
             finalColor = o->computeLight( hit.position, ray.direction )
-                    * std::min( 1.0f, 1.0f/glm::length( hit.position - _pos)) ;
+                         * std::min( 1.0f, 1.0f/glm::length( hit.position - _pos)) ;
         }
     }
     return finalColor;

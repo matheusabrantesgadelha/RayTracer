@@ -17,12 +17,12 @@ public:
      * @param _res_height Resolution height
      * @param _ns Number of sample paths per pixel
      */
-	PathTraceCamera(const unsigned int _res_width, const unsigned int _res_height, const unsigned int _ns);
+    PathTraceCamera(const unsigned int _res_width, const unsigned int _res_height, const unsigned int _ns);
 
     /**
      * @brief PathTraceCamera destructor
      */
-	~PathTraceCamera();
+    ~PathTraceCamera();
 
     /**
      * @brief render Method to render a scene using Path Tracing
@@ -34,7 +34,7 @@ private:
     /**
      * @brief numSamples Number of sample paths per pixel
      */
-	unsigned int numSamples;
+    unsigned int numSamples;
     /**
      * @brief bounces Number of bounces a path can have
      */

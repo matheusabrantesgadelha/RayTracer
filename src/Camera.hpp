@@ -14,17 +14,17 @@
 class Camera
 {
 public:
-	Camera(const unsigned int _res_width, const unsigned int _res_height);
-	~Camera();
-	virtual void render( Scene& _scene );
+    Camera(const unsigned int _res_width, const unsigned int _res_height);
+    ~Camera();
+    virtual void render( Scene& _scene );
 
-	glm::vec3 position;
-	glm::vec3 lookAt;
-	glm::vec3 up;
-	glm::i16vec2 resolution;
-	glm::vec2 planeSize;
-	float focalDistance;
-	Image<RGB> image;
+    glm::vec3 position;
+    glm::vec3 lookAt;
+    glm::vec3 up;
+    glm::i16vec2 resolution;
+    glm::vec2 planeSize;
+    float focalDistance;
+    Image<RGB> image;
 
 protected:
     void buildRays();
@@ -32,7 +32,7 @@ protected:
 
 
 private:
-	float aspect;
+    float aspect;
 };
 
 #endif

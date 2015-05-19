@@ -18,14 +18,14 @@
 class Sphere : public Object
 {
 public:
-	Sphere();
-	~Sphere();
+    Sphere();
+    ~Sphere();
 
-	virtual bool rayCast( Ray _ray, RayHit& _hit );
-	virtual glm::vec3 getNormalAt( glm::vec3 _p );
+    virtual bool rayCast( Ray _ray, RayHit& _hit );
+    virtual glm::vec3 getNormalAt( glm::vec3 _p );
     virtual glm::vec3 getRandomSurfacePoint();
 
-	float radius;
+    float radius;
 };
 
 #endif
