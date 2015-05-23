@@ -23,29 +23,6 @@ Material::Material()
 
 Material::~Material() {}
 
-RGB Material::calcIllumination( const glm::vec3 _normal, const LightRay _light, const glm::vec3 _view )
-{
-    RGB result;
-    result = glm::dot( _light.direction, _normal ) * albedo * _light.color;
-
-    glm::vec3 light_reflect = reflect( _light.direction, _normal );
-    float reflect_factor = glm::dot( light_reflect, _view );
-    if( reflect_factor > 0 )
-    {
-        reflect_factor = pow(reflect_factor, shininess);
-        result += reflect_factor * specularColor;
-    }
-
-    result = glm::clamp( result, 0.0f, 1.0f );
-
-    return result+emmitance;
-}
-
-RGB Material::combineColors( const RGB material, const RGB reflected )
-{
-    return material + reflectiveness*reflected;
-}
-
 RGB Material::BRDF(const glm::vec3 _in, const glm::vec3 _out, const glm::vec3 _normal )
 {
     return customBRDF( _in, _out, _normal, *this );

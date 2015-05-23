@@ -4,7 +4,7 @@ CFLAGS = -Wall -std=c++11 -ggdb -O3 -fopenmp
 
 INCLUDES = -Iglm
 
-OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o PathTraceCamera.o teste.o
+OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o PathTraceCamera.o teste.o teste2.o
 
 all: src/main.cpp $(OBJS)
 	$(CC) $(CFLAGS) src/main.cpp $(OBJS) -o bin/main $(INCLUDES)
@@ -32,6 +32,9 @@ Object.o: src/Object.cpp
 
 teste.o: src/teste.cpp
 	$(CC) $(CFLAGS) -c src/teste.cpp $(INCLUDES)
+
+teste2.o: testando/teste2.cpp
+	$(CC) $(CFLAGS) -c testando/teste2.cpp $(INCLUDES)
 
 clean:
 	rm *.o

@@ -9,7 +9,7 @@ PathTraceCamera::~PathTraceCamera()
 {
 }
 
-void PathTraceCamera::render(Scene _scene)
+void PathTraceCamera::render(Scene& _scene)
 {
     buildRays();
     int numPixesl = rays.size() * rays[0].size();
@@ -32,7 +32,7 @@ void PathTraceCamera::render(Scene _scene)
                 displacedRay.origin += displacementVec;
 
                 RayHit hit;
-                colorSum += _scene.pathCast( displacedRay, hit, bounces );
+                colorSum += _scene.pathCast( displacedRay );
             }
             image.data[i][j] = glm::clamp(colorSum / (float)numSamples, 0.0f, 1.0f);
             pixelsDone++;

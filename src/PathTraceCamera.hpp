@@ -28,7 +28,7 @@ public:
      * @brief render Method to render a scene using Path Tracing
      * @param _scene Scene representation
      */
-    virtual void render( Scene _scene);
+    virtual void render( Scene& _scene);
 
 private:
     /**

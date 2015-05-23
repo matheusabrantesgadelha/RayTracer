@@ -46,7 +46,7 @@ int main( int argc, char** argv )
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
 
-    PathTraceCamera camera( 320, 240, 100 );
+    PathTraceCamera camera( 320, 240, 10 );
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
     camera.focalDistance = 15.0f;
     camera.position += glm::vec3( 0,0, 135 );

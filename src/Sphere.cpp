@@ -42,3 +42,14 @@ glm::vec3 Sphere::getRandomSurfacePoint()
 
     return randSurf + center;
 }
+
+DiffGeoData Sphere::getDiffGeoDataAtPoint( glm::vec3 _point )
+{
+	glm::vec3 normal = glm::normalize( _point - center );
+	return DiffGeoData( normal );
+}
+
+DiffGeoData Sphere::getSampledDiffGeoData()
+{
+	return getDiffGeoDataAtPoint( getRandomSurfacePoint() );
+}

@@ -22,8 +22,14 @@ public:
     ~Sphere();
 
     virtual bool rayCast( Ray _ray, RayHit& _hit );
+
     virtual glm::vec3 getNormalAt( glm::vec3 _p );
+
     virtual glm::vec3 getRandomSurfacePoint();
+
+    virtual DiffGeoData getDiffGeoDataAtPoint( glm::vec3 _point ); 
+
+    virtual DiffGeoData getSampledDiffGeoData();
 
     float radius;
 };

@@ -29,23 +29,6 @@ public:
     ~Material();
 
     /**
-     * @brief calcIllumination Calculates illumination in a phong-based fashion
-     * @param _normal Normal of the surface where the illumination will be caculated
-     * @param _light Reverse light direction
-     * @param _view View vector from the camera
-     * @return Final color of the surface
-     */
-    RGB calcIllumination( const glm::vec3 _normal, const LightRay _light, const glm::vec3 _view );
-
-    /**
-     * @brief combineColors
-     * @param material
-     * @param reflected
-     * @return Final color after combining material color and reflected lights
-     */
-    RGB combineColors( const RGB material, const RGB reflected );
-
-    /**
      * @brief brdf Returns an outgoing light considering brdf
      * @param normal Normal of the surface
      * @param light Light direction of incoming light

@@ -4,8 +4,10 @@
 #include "aliases.hpp"
 #include "Material.hpp"
 #include "Scene.hpp"
+#include "DiffGeomData.hpp"
 
 class Scene;
+struct DiffGeoData;
 
 class Object
 {
@@ -13,15 +15,19 @@ public:
     Object();
 
     virtual bool rayCast( Ray _ray, RayHit& _hit ) = 0;
+
     virtual glm::vec3 getNormalAt( glm::vec3 _p ) = 0;
+
     virtual glm::vec3 getRandomSurfacePoint() = 0;
-    RGB computeLight( const glm::vec3 _pos, const glm::vec3 _view );
-    RGB computeReflection( const glm::vec3 _pos, const glm::vec3 _view );
+
+    virtual DiffGeoData getDiffGeoDataAtPoint( glm::vec3 _point ) = 0;
+
+    virtual DiffGeoData getSampledDiffGeoData() = 0;
+
     bool isLight();
 
     unsigned int id;
     std::shared_ptr<Scene> scene;
-    //TODO: change this to child classes to treat area lights.
     glm::vec3 center;
     std::shared_ptr<Material> material;
 

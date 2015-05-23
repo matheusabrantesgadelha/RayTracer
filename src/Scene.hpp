@@ -22,9 +22,8 @@ public:
     std::shared_ptr<Scene> getptr();
     void addObject( std::shared_ptr<Object> _obj );
     bool rayCast( Ray _ray, RayHit& _hit);
-    RGB pathCast(Ray _ray, RayHit& _hit, unsigned int bounces);
+    RGB pathCast(Ray _ray);
     RGB bidirectionalPathCast( Ray _ray );
-    bool finalRayCast( Ray _ray, RayHit& _hit);
 
     std::vector< std::shared_ptr<Object> > objects;
     std::vector< std::shared_ptr<Object> > lights;

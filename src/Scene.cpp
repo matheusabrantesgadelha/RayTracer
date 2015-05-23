@@ -81,26 +81,6 @@ void Scene::setLightPathSize(const unsigned int _lightPathSize)
     this->lightPathSize = _lightPathSize;
 }
 
-bool Scene::finalRayCast( Ray _ray, RayHit& _hit )
-{
-    if( rayCast( _ray, _hit ) )
-    {
-        std::shared_ptr<Object> obj = objects[_hit.objId];
-        RGB materialColor = obj->computeLight( _hit.position, _ray.direction );
-        RGB reflectedColor( 0,0,0 );
-
-        if( obj->material->reflectiveness > 0.0f )
-        {
-            reflectedColor = obj->computeReflection( _hit.position, _ray.direction );
-        }
-        _hit.color = obj->material->combineColors( materialColor, reflectedColor );
-
-        return true;
-    }
-
-    return false;
-}
-
 void Scene::computeCameraPath(Ray _orgRay, std::vector<RayHit> &_path, unsigned int _bounces)
 {
     Ray ray = _orgRay;
@@ -236,7 +216,7 @@ RGB Scene::bidirectionalPathCast(Ray _ray)
     return finalColor/numFactors;
 }
 
-RGB Scene::pathCast( Ray _ray, RayHit& _hit, unsigned int bounces )
+RGB Scene::pathCast( Ray _ray )
 {
     return bidirectionalPathCast( _ray);
 }

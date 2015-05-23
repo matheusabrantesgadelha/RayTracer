@@ -31,18 +31,3 @@ void Camera::buildRays()
     }
 }
 
-void Camera::render( Scene& _scene )
-{
-    buildRays();
-    for( unsigned int i=0; i < rays.size(); ++i )
-    {
-        for( unsigned int j=0; j < rays[i].size(); ++j )
-        {
-            RayHit hit;
-            if( _scene.finalRayCast( rays[i][j], hit ) )
-            {
-                image.data[i][j] = hit.color;
-            }
-        }
-    }
-}
