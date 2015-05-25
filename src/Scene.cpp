@@ -30,14 +30,14 @@ std::shared_ptr<Scene> Scene::getptr()
     return shared_from_this();
 }
 
-bool Scene::rayCast( Ray _ray, RayHit& _hit )
+bool Scene::intersect( Ray _ray, RayHit& _hit )
 {
     bool firstHit = true;
     RayHit hitDesc;
     float distanceFromHit = 0.0f;
     for( auto o : objects )
     {
-        if( o->rayCast( _ray, _hit ) )
+        if( o->intersect( _ray, _hit ) )
         {
             if( firstHit )
             {
@@ -87,7 +87,7 @@ void Scene::computeCameraPath(Ray _orgRay, std::vector<RayHit> &_path, unsigned 
     for( unsigned int i=0; i<_bounces; ++i )
     {
         RayHit newHit;
-        if(rayCast( ray, newHit ))
+        if(intersect( ray, newHit ))
         {
             newHit.inDirection = ray.direction;
             glm::vec3 normal = -newHit.obj->getNormalAt( newHit.position );
@@ -123,7 +123,7 @@ void Scene::computeLightPath(Ray _orgRay, std::vector<RayHit>& _path, unsigned i
     for( unsigned int i=0; i<_bounces; ++i )
     {
         RayHit newHit;
-        if(rayCast( ray, newHit ))
+        if(intersect( ray, newHit ))
         {
             newHit.inDirection = ray.direction;
 
@@ -200,7 +200,7 @@ RGB Scene::bidirectionalPathCast(Ray _ray)
 
                 RayHit shadowHit;
 
-                if( rayCast(shadowRay,shadowHit) && shadowHit.obj == lightHit.obj )
+                if( intersect(shadowRay,shadowHit) && shadowHit.obj == lightHit.obj )
                 {
                     float cosTheta = std::max(glm::dot(shadowRay.direction, normal),0.0f);
                     finalColor += lightHit.material->BRDF( lightHit.inDirection, shadowRay.direction, normal)

@@ -21,7 +21,7 @@ public:
     ~Scene();
     std::shared_ptr<Scene> getptr();
     void addObject( std::shared_ptr<Object> _obj );
-    bool rayCast( Ray _ray, RayHit& _hit);
+    bool intersect( Ray _ray, RayHit& _hit);
     RGB pathCast(Ray _ray);
     RGB bidirectionalPathCast( Ray _ray );
 

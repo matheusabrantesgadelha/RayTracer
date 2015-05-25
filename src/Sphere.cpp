@@ -9,7 +9,7 @@ Sphere::~Sphere()
 {
 }
 
-bool Sphere::rayCast( Ray _ray, RayHit& _hit )
+bool Sphere::intersect( Ray _ray, RayHit& _hit )
 {
     glm::vec3 origin_center = center - _ray.origin;
     if( glm::dot( origin_center, _ray.direction ) <= 0 )

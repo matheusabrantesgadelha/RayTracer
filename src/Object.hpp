@@ -14,7 +14,7 @@ class Object
 public:
     Object();
 
-    virtual bool rayCast( Ray _ray, RayHit& _hit ) = 0;
+    virtual bool intersect( Ray _ray, RayHit& _hit ) = 0;
 
     virtual glm::vec3 getNormalAt( glm::vec3 _p ) = 0;
 
