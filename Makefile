@@ -4,7 +4,7 @@ CFLAGS = -Wall -std=c++11 -ggdb -O3 -fopenmp
 
 INCLUDES = -Iglm
 
-OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o PathTraceCamera.o DiffGeomData.o IlluminationSolver.o
+OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o MultiSampledCamera.o DiffGeomData.o IlluminationSolver.o
 
 all: src/main.cpp $(OBJS)
 	$(CC) $(CFLAGS) src/main.cpp $(OBJS) -o bin/main $(INCLUDES)
@@ -15,8 +15,8 @@ ImageWriter.o: src/ImageWriter.cpp
 Camera.o: src/Camera.cpp
 	$(CC) $(CFLAGS) -c src/Camera.cpp $(INCLUDES)
 
-PathTraceCamera.o: src/PathTraceCamera.cpp
-	$(CC) $(CFLAGS) -c src/PathTraceCamera.cpp $(INCLUDES)
+MultiSampledCamera.o: src/MultiSampledCamera.cpp
+	$(CC) $(CFLAGS) -c src/MultiSampledCamera.cpp $(INCLUDES)
 
 Scene.o: src/Scene.cpp
 	$(CC) $(CFLAGS) -c src/Scene.cpp $(INCLUDES)

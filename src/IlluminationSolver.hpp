@@ -4,6 +4,8 @@
 #include "aliases.hpp"
 #include "Scene.hpp"
 
+class Scene;
+
 class IlluminationSolver
 {
 	virtual void preProcessScene( const Scene& _scene );

@@ -2,7 +2,6 @@
 
 Scene::Scene() :
     environmentColor(0,0,0),
-//    environmentColor(0.2,0.2,0.15),
     lightPathSize(3),
     cameraPathSize(3)
 {

@@ -1,15 +1,15 @@
-#include "PathTraceCamera.hpp"
+#include "MultiSampledCamera.hpp"
 
-PathTraceCamera::PathTraceCamera(const unsigned int _res_width, const unsigned int _res_height, const unsigned int _ns)
+MultiSampledCamera::MultiSampledCamera(const unsigned int _res_width, const unsigned int _res_height, const unsigned int _ns)
     : Camera( _res_width, _res_height ), numSamples( _ns ), bounces( 3 ), deltaDisplacement( 0.1f)
 {
 }
 
-PathTraceCamera::~PathTraceCamera()
+MultiSampledCamera::~MultiSampledCamera()
 {
 }
 
-void PathTraceCamera::render(Scene& _scene)
+void MultiSampledCamera::render(Scene& _scene)
 {
     buildRays();
     int numPixesl = rays.size() * rays[0].size();

@@ -6,23 +6,23 @@
 #include "gtc/random.hpp"
 
 /**
- * @brief The PathTraceCamera class. Extends Camera class to provide Path Tracing.
+ * @brief The MultiSampledCamera class. Extends Camera class to provide Path Tracing.
  */
-class PathTraceCamera : public Camera
+class MultiSampledCamera : public Camera
 {
 public:
     /**
-     * @brief PathTraceCamera constructor
+     * @brief MultiSampledCamera constructor
      * @param _res_width Resolution width
      * @param _res_height Resolution height
      * @param _ns Number of sample paths per pixel
      */
-    PathTraceCamera(const unsigned int _res_width, const unsigned int _res_height, const unsigned int _ns);
+    MultiSampledCamera(const unsigned int _res_width, const unsigned int _res_height, const unsigned int _ns);
 
     /**
-     * @brief PathTraceCamera destructor
+     * @brief MultiSampledCamera destructor
      */
-    ~PathTraceCamera();
+    ~MultiSampledCamera();
 
     /**
      * @brief render Method to render a scene using Path Tracing

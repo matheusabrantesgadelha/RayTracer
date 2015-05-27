@@ -17,7 +17,8 @@ class Object;
 class Scene : public std::enable_shared_from_this<Scene>
 {
 public:
-    Scene();
+	Scene( );
+	
     ~Scene();
     std::shared_ptr<Scene> getptr();
     void addObject( std::shared_ptr<Object> _obj );
@@ -34,8 +35,8 @@ public:
     void setCameraPathSize( const unsigned int _cameraPathSize);
 
 private:
-    void computeLightPath(Ray _orgRay, std::vector<RayHit>& _path , unsigned int _bounces);
-    void computeCameraPath(Ray _orgRay, std::vector<RayHit>& _path , unsigned int _bounces);
+    void computeLightPath( Ray _orgRay, std::vector<RayHit>& _path , unsigned int _bounces );
+    void computeCameraPath( Ray _orgRay, std::vector<RayHit>& _path , unsigned int _bounces );
 
     unsigned int lightBounces;
     unsigned int lightPathSize;
