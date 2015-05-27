@@ -9,7 +9,7 @@ def writeHeaderClass( _file, _className ):
 
 class {class_name}
 {{
-}}
+}};
 
 #endif
 '''.format( define_name = defineName, class_name = _className )

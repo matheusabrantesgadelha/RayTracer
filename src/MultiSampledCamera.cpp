@@ -1,7 +1,12 @@
 #include "MultiSampledCamera.hpp"
 
-MultiSampledCamera::MultiSampledCamera(const unsigned int _res_width, const unsigned int _res_height, const unsigned int _ns)
-    : Camera( _res_width, _res_height ), numSamples( _ns ), bounces( 3 ), deltaDisplacement( 0.1f)
+MultiSampledCamera::MultiSampledCamera(const unsigned int _res_width, const unsigned int _res_height, 
+		const unsigned int _ns,
+		const std::shared_ptr<IlluminationSolver> _solver)
+    : Camera( _res_width, _res_height, _solver ), 
+	numSamples( _ns ), 
+	bounces( 3 ), 
+	deltaDisplacement( 0.1f)
 {
 }
 
@@ -9,7 +14,7 @@ MultiSampledCamera::~MultiSampledCamera()
 {
 }
 
-void MultiSampledCamera::render(Scene& _scene)
+void MultiSampledCamera::render( Scene& _scene)
 {
     buildRays();
     int numPixesl = rays.size() * rays[0].size();

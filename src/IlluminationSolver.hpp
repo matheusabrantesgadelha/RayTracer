@@ -8,6 +8,8 @@ class Scene;
 
 class IlluminationSolver
 {
+public:
+	IlluminationSolver();
 	virtual void preProcessScene( const Scene& _scene );
 	virtual RGB estimateRadiance( const Ray _ray, const Scene& _scene ) = 0;
 };

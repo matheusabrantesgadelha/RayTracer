@@ -1,12 +1,14 @@
 #include "Camera.hpp"
 
-Camera::Camera(const unsigned int _res_width, const unsigned int _res_height):
+Camera::Camera(const unsigned int _res_width, const unsigned int _res_height, 
+			const std::shared_ptr<IlluminationSolver> _solver ):
     position(0,0,0), lookAt(0,0,-1), up(0,1,0),
     resolution(_res_width, _res_height),
     planeSize( _res_width, _res_height ),
     focalDistance( 1.0f ),
     image( _res_width, _res_height ),
-    rays( _res_height, std::vector<Ray>( _res_width, Ray() ) )
+    rays( _res_height, std::vector<Ray>( _res_width, Ray() ) ),
+	solver( _solver )
 {
     aspect = (float) _res_width / (float) _res_height;
 }

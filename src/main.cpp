@@ -12,6 +12,7 @@
 #include "ImageWriter.hpp"
 #include "Camera.hpp"
 #include "MultiSampledCamera.hpp"
+#include "DirectIlluminationSolver.hpp"
 #include "Sphere.hpp"
 
 //#define RELEASE
@@ -46,7 +47,11 @@ int main( int argc, char** argv )
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
 
-    MultiSampledCamera camera( 320, 240, 10 );
+	std::shared_ptr<DirectIlluminationSolver> solver( new DirectIlluminationSolver() );
+
+    MultiSampledCamera camera( 320, 240, 10, 
+			std::dynamic_pointer_cast<IlluminationSolver>( solver ));
+
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
     camera.focalDistance = 15.0f;
     camera.position += glm::vec3( 0,0, 135 );
