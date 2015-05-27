@@ -4,7 +4,7 @@ CFLAGS = -Wall -std=c++11 -ggdb -O3 -fopenmp
 
 INCLUDES = -Iglm
 
-OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o MultiSampledCamera.o DiffGeomData.o IlluminationSolver.o DirectIlluminationSolver.o
+OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o MultiSampledCamera.o DiffGeomData.o IlluminationSolver.o DirectIlluminationSolver.o SimpleCamera.o
 
 all: src/main.cpp $(OBJS)
 	$(CC) $(CFLAGS) src/main.cpp $(OBJS) -o bin/main $(INCLUDES)
@@ -38,6 +38,9 @@ IlluminationSolver.o: src/IlluminationSolver.cpp
 
 DirectIlluminationSolver.o: src/DirectIlluminationSolver.cpp
 	$(CC) $(CFLAGS) -c src/DirectIlluminationSolver.cpp $(INCLUDES)
+
+SimpleCamera.o: src/SimpleCamera.cpp
+	$(CC) $(CFLAGS) -c src/SimpleCamera.cpp $(INCLUDES)
 
 clean:
 	rm *.o

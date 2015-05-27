@@ -32,7 +32,7 @@ public:
     float aspect;
 
 protected:
-    void buildRays();
+    virtual void buildRays();
     std::vector< std::vector<Ray> > rays;
 	std::shared_ptr<IlluminationSolver> solver;
 
