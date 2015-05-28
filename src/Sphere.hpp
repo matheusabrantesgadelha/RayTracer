@@ -27,6 +27,8 @@ public:
 
     virtual glm::vec3 getRandomSurfacePoint();
 
+	virtual float getArea();
+
     virtual DiffGeoData getDiffGeoDataAtPoint( glm::vec3 _point ); 
 
     virtual DiffGeoData getSampledDiffGeoData();

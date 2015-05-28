@@ -24,6 +24,8 @@ public:
 
     virtual DiffGeoData getSampledDiffGeoData() = 0;
 
+	virtual float getArea() = 0;
+
     bool isLight();
 
     unsigned int id;

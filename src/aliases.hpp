@@ -5,8 +5,12 @@
 #include <memory>
 
 #include "glm.hpp"
+#include "gtc/constants.hpp"
 
 //#include "Material.hpp"
+
+const float PI = glm::pi<float>();
+const float TWO_PI = 2.0f*PI;
 
 typedef glm::vec3 RGB;
 typedef glm::vec4 RGBA;

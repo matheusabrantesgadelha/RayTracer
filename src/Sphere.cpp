@@ -53,3 +53,8 @@ DiffGeoData Sphere::getSampledDiffGeoData()
 {
 	return getDiffGeoDataAtPoint( getRandomSurfacePoint() );
 }
+
+float Sphere::getArea()
+{
+	return 4.0f*PI*radius*radius;
+}
