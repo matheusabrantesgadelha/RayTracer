@@ -14,6 +14,7 @@
 #include "MultiSampledCamera.hpp"
 #include "DirectIlluminationSolver.hpp"
 #include "Sphere.hpp"
+#include "SimpleCamera.hpp"
 
 //#define RELEASE
 
@@ -49,7 +50,7 @@ int main( int argc, char** argv )
 
 	std::shared_ptr<DirectIlluminationSolver> solver( new DirectIlluminationSolver() );
 
-    MultiSampledCamera camera( 320, 240, 10, 
+    SimpleCamera camera( 320, 240, 
 			std::dynamic_pointer_cast<IlluminationSolver>( solver ));
 
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
@@ -81,8 +82,8 @@ int main( int argc, char** argv )
     sphere2->center = glm::vec3( -20, -20, -20 );
     sphere2->radius = 20.0f;
     sphere2->material->albedo = RGB(1.0,1.0,1.0);
-    sphere2->material->reflectionSample = mirrorSample;
-    sphere2->material->customBRDF = mirrorBRDF;
+//    sphere2->material->reflectionSample = mirrorSample;
+//    sphere2->material->customBRDF = mirrorBRDF;
 
     std::shared_ptr<Sphere> backWall( new Sphere() );
     backWall->center = glm::vec3( 0, 0, -100050 );

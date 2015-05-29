@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <memory>
+#include <iostream>
+#include <cmath>
 
 #include "glm.hpp"
 #include "gtc/constants.hpp"
@@ -49,5 +51,12 @@ struct LightRay
     RGB color;
     glm::vec3 direction;
 };
+
+inline float AbsDot( glm::vec3 a, glm::vec3 b )
+{
+	float val = glm::dot(a,b);
+	if ( val < 0.0f ) return -val;
+	return val;
+}
 
 #endif

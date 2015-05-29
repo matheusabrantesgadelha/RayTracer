@@ -29,7 +29,7 @@ std::shared_ptr<Scene> Scene::getptr()
     return shared_from_this();
 }
 
-bool Scene::intersect( Ray _ray, RayHit& _hit )
+bool Scene::intersect( const Ray _ray, RayHit& _hit ) const
 {
     bool firstHit = true;
     RayHit hitDesc;

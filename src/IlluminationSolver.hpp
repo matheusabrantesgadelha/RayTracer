@@ -3,6 +3,7 @@
 
 #include "aliases.hpp"
 #include "Scene.hpp"
+#include <tuple>
 
 class Scene;
 
@@ -11,7 +12,8 @@ class IlluminationSolver
 public:
 	IlluminationSolver();
 	virtual void preProcessScene( const Scene& _scene );
-	virtual RGB estimateRadiance( const Ray _ray, const Scene& _scene ) = 0;
+	virtual void estimateRadiance( const Ray _ray, const Scene& _scene, 
+			std::vector< std::tuple<RGB, float> >& _samples ) = 0;
 };
 
 #endif
