@@ -161,7 +161,8 @@ RGB Scene::bidirectionalPathCast(Ray _ray)
             RayHit orgHit;
             orgHit.incomingRadiance = light->material->emmitance;
             orgHit.irradiance = light->material->emmitance;
-            orgHit.position = light->getRandomSurfacePoint();
+			float pdf;
+            orgHit.position = light->getRandomSurfacePoint(pdf);
             orgHit.objId = light->id;
             orgHit.material = light->material;
 

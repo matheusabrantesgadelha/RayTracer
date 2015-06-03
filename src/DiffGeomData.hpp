@@ -8,9 +8,10 @@
 
 struct DiffGeoData
 {
-	DiffGeoData( const glm::vec3 _normal = glm::vec3(), const glm::vec3 _du = glm::vec3(), 
-			const glm::vec3 _dv = glm::vec3(), const std::shared_ptr<Object> _object = nullptr ):
-		normal( _normal ), du( _du ), dv( _dv ), object( _object )
+	DiffGeoData( const glm::vec3 _normal = glm::vec3(), const glm::vec3 _point = glm::vec3(),
+			const glm::vec3 _du = glm::vec3(), const glm::vec3 _dv = glm::vec3(), 
+			const std::shared_ptr<Object> _object = nullptr ):
+		normal( _normal ), point( _point ), du( _du ), dv( _dv ), object( _object )
 	{}
 
 	glm::vec3 normal;

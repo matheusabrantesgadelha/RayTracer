@@ -36,9 +36,10 @@ glm::vec3 Sphere::getNormalAt( glm::vec3 _p )
     return glm::normalize( _p - center );
 }
 
-glm::vec3 Sphere::getRandomSurfacePoint()
+glm::vec3 Sphere::getRandomSurfacePoint( float& _pdf )
 {
     glm::vec3 randSurf = glm::sphericalRand(this->radius);
+	_pdf = 1.0f/ getArea();
 
     return randSurf + center;
 }
@@ -46,12 +47,12 @@ glm::vec3 Sphere::getRandomSurfacePoint()
 DiffGeoData Sphere::getDiffGeoDataAtPoint( glm::vec3 _point )
 {
 	glm::vec3 normal = glm::normalize( _point - center );
-	return DiffGeoData( normal );
+	return DiffGeoData( normal, _point );
 }
 
-DiffGeoData Sphere::getSampledDiffGeoData()
+DiffGeoData Sphere::getSampledDiffGeoData( float& _pdf )
 {
-	return getDiffGeoDataAtPoint( getRandomSurfacePoint() );
+	return getDiffGeoDataAtPoint( getRandomSurfacePoint(_pdf) );
 }
 
 float Sphere::getArea()

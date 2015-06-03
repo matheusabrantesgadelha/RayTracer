@@ -21,16 +21,16 @@ void DirectIlluminationSolver::estimateRadiance( const Ray _ray, const Scene& _s
 			Ray shadowRay;
 			shadowRay.origin = hit.position;
 
-			glm::vec3 sampleLightPos = lightObj->getRandomSurfacePoint();
-			
-			shadowRay.direction = glm::normalize( sampleLightPos - shadowRay.origin );
-			RayHit lightHit;
 			float pdf=1.0f;
+			DiffGeoData sampleLightGeo = lightObj->getSampledDiffGeoData(pdf);
+			
+			shadowRay.direction = glm::normalize( sampleLightGeo.point - shadowRay.origin );
+			RayHit lightHit;
 
 			if( _scene.intersect( shadowRay, lightHit ) )
 			{
-//				if (glm::length(lightHit.position - sampleLightPos ) < 0.00001f)
-				if( lightHit.obj == lightObj )
+				if (glm::length(lightHit.position - sampleLightGeo.point ) < 0.00001f)
+//				if( lightHit.obj == lightObj )
 				{
 					std::shared_ptr<Object> obj = hit.obj;
 
@@ -43,9 +43,9 @@ void DirectIlluminationSolver::estimateRadiance( const Ray _ray, const Scene& _s
 
 					radiance *= cosTheta;
 
-					pdf = glm::length( hit.position - sampleLightPos );
-					pdf *= pdf;
-					pdf /= lightObj->getArea();
+					pdf = glm::length2( hit.position - sampleLightGeo.point ) /
+							( AbsDot( sampleLightGeo.normal, shadowRay.direction ) 
+							  * lightObj->getArea() );
 
 					_samples.push_back( std::make_tuple( radiance, pdf ));
 				}

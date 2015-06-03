@@ -18,11 +18,11 @@ public:
 
     virtual glm::vec3 getNormalAt( glm::vec3 _p ) = 0;
 
-    virtual glm::vec3 getRandomSurfacePoint() = 0;
+    virtual glm::vec3 getRandomSurfacePoint( float& _pdf ) = 0;
 
     virtual DiffGeoData getDiffGeoDataAtPoint( glm::vec3 _point ) = 0;
 
-    virtual DiffGeoData getSampledDiffGeoData() = 0;
+    virtual DiffGeoData getSampledDiffGeoData( float& _pdf ) = 0;
 
 	virtual float getArea() = 0;
 

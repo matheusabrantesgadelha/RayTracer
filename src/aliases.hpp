@@ -8,6 +8,7 @@
 
 #include "glm.hpp"
 #include "gtc/constants.hpp"
+#include "gtx/norm.hpp"
 
 //#include "Material.hpp"
 
