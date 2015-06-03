@@ -3,6 +3,11 @@
 Object::Object() : material( new Material() )
 {}
 
+std::shared_ptr<Object> Object::getptr()
+{
+	return shared_from_this();
+}
+
 bool Object::isLight()
 {
     return ( material->emmitance.r > 0.0f ||

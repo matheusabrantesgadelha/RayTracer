@@ -47,7 +47,10 @@ glm::vec3 Sphere::getRandomSurfacePoint( float& _pdf )
 DiffGeoData Sphere::getDiffGeoDataAtPoint( glm::vec3 _point )
 {
 	glm::vec3 normal = glm::normalize( _point - center );
-	return DiffGeoData( normal, _point );
+	DiffGeoData diffGeo( normal, _point );
+	diffGeo.object = getptr();
+
+	return diffGeo;
 }
 
 DiffGeoData Sphere::getSampledDiffGeoData( float& _pdf )
