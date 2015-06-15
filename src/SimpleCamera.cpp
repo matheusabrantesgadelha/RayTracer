@@ -12,7 +12,7 @@ void SimpleCamera::render( Scene& _scene )
 		for( size_t j=0; j<rays[i].size(); ++j )
 		{
 			std::vector< std::tuple<RGB,float> > samples;
-			for( size_t s=0; s<100; ++s )
+			for( size_t s=0; s<10; ++s )
 				solver->estimateRadiance( rays[i][j], _scene, samples );
 
 			RGB finalColor;

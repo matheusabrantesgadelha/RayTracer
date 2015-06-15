@@ -9,12 +9,15 @@
 #include "gtc/constants.hpp"
 
 #include "aliases.hpp"
+#include "BxDF.hpp"
 
 glm::vec3 diffuseSampling( const glm::vec3 _normal, const glm::vec3 _light );
 
 RGB diffuseBRDF(const glm::vec3 _in, const glm::vec3 _out, const glm::vec3 _normal,  Material _m);
 
 const float POW_PI_MINUS_1 = 1.0f/glm::pi<float>();
+
+class BxDF;
 
 /**
  * @brief The Material class. Represents a material.
@@ -35,10 +38,10 @@ public:
      * @return Outgoing light direction
      */
     std::function< RGB( const glm::vec3, const glm::vec3, const glm::vec3, Material ) > customBRDF;
-
     RGB BRDF( const glm::vec3, const glm::vec3, const glm::vec3 );
-
     std::function< glm::vec3( const glm::vec3, const glm::vec3 ) > reflectionSample;
+
+	std::shared_ptr<BxDF> bxdf;
 
     /**
      * @brief diffuseColor Diffuse color of the surface

@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include <glm.hpp>
+#include "glm.hpp"
 #include "Object.hpp"
 
 struct DiffGeoData
