@@ -1,9 +1,9 @@
-#ifndef MIRRORBRDF_H_ 
-#define MIRRORBRDF_H_ 
+#ifndef LAMBERTIANBRDF_H_ 
+#define LAMBERTIANBRDF_H_ 
 
 #include "BxDF.hpp"
 
-class MirrorBRDF : public BxDF
+class LambertianBRDF : public BxDF
 {
 public:
 	virtual void sample( DiffGeoData _geoData, glm::vec3 _in, glm::vec3& _out, float& _pdf );

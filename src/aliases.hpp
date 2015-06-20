@@ -13,6 +13,7 @@
 //#include "Material.hpp"
 
 const float PI = glm::pi<float>();
+const float INV_PI = 1.0f/glm::pi<float>();
 const float TWO_PI = 2.0f*PI;
 
 typedef glm::vec3 RGB;
@@ -58,6 +59,11 @@ inline float AbsDot( glm::vec3 a, glm::vec3 b )
 	float val = glm::dot(a,b);
 	if ( val < 0.0f ) return -val;
 	return val;
+}
+
+inline void PrintVec( glm::vec3 v )
+{
+	std::cout << v.r << " " << v.g << " " << v.b << std::endl;
 }
 
 #endif

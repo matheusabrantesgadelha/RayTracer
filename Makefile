@@ -4,10 +4,11 @@ CFLAGS = -Wall -std=c++11 -ggdb -O3 -fopenmp
 
 INCLUDES = -Iglm
 
-OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o MultiSampledCamera.o DiffGeomData.o IlluminationSolver.o DirectIlluminationSolver.o SimpleCamera.o BxDF.o MirrorBRDF.o
+OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o MultiSampledCamera.o DiffGeomData.o IlluminationSolver.o DirectIlluminationSolver.o SimpleCamera.o BxDF.o MirrorBRDF.o LambertianBRDF.o
 
-all: src/main.cpp $(OBJS)
+all: src/main.cpp src/tst/tstBxDF.cpp $(OBJS)
 	$(CC) $(CFLAGS) src/main.cpp $(OBJS) -o bin/main $(INCLUDES)
+	$(CC) $(CFLAGS) src/tst/tstBxDF.cpp $(OBJS) -o bin/tstBxDF $(INCLUDES)
 
 ImageWriter.o: src/ImageWriter.cpp
 	$(CC) $(CFLAGS) -c src/ImageWriter.cpp $(INCLUDES)
@@ -47,6 +48,9 @@ BxDF.o: src/BxDF.cpp
 
 MirrorBRDF.o: src/MirrorBRDF.cpp
 	$(CC) $(CFLAGS) -c src/MirrorBRDF.cpp $(INCLUDES)
+
+LambertianBRDF.o: src/LambertianBRDF.cpp
+	$(CC) $(CFLAGS) -c src/LambertianBRDF.cpp $(INCLUDES)
 
 clean:
 	rm *.o

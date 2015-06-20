@@ -39,7 +39,7 @@ void DirectIlluminationSolver::estimateRadiance( const Ray _ray, const Scene& _s
 
 					RGB radiance = obj->material->BRDF(
 							shadowRay.direction, _ray.direction,
-							objNormal);
+							objNormal) * lightHit.obj->material->emmitance;
 
 					radiance *= cosTheta;
 

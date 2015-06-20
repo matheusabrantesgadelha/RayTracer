@@ -63,7 +63,7 @@ int main( int argc, char** argv )
     light->center = glm::vec3( 0, 20, -20);
     light->radius = 5.0f;
     light->material->albedo = RGB(1,1,1);
-    light->material->emmitance = RGB(1,1,1);
+    light->material->emmitance = 10.0f*RGB(1,1,0);
     light->material->power = 20.0f;
 
 //    std::shared_ptr<Sphere> light2( new Sphere() );
