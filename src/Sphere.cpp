@@ -12,7 +12,7 @@ Sphere::~Sphere()
 bool Sphere::intersect( Ray _ray, RayHit& _hit )
 {
     glm::vec3 origin_center = center - _ray.origin;
-    if( glm::dot( origin_center, _ray.direction ) <= 0 )
+    if( glm::dot( origin_center, _ray.direction ) <= 0.0f )
         return false;
 
     glm::vec3 proj_ray = glm::proj( origin_center, _ray.direction );

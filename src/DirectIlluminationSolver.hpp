@@ -10,7 +10,7 @@ class DirectIlluminationSolver : public IlluminationSolver
 public:
 	DirectIlluminationSolver();
 	~DirectIlluminationSolver();
-	virtual void estimateRadiance( const Ray _ray, const Scene& _scene, 
+	virtual void estimateRadiance( Ray _ray, const Scene& _scene, 
 			std::vector< std::tuple<RGB, float> >& _samples );
 };
 

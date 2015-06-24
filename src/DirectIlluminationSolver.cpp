@@ -4,7 +4,7 @@ DirectIlluminationSolver::DirectIlluminationSolver(){}
 
 DirectIlluminationSolver::~DirectIlluminationSolver(){}
 
-void DirectIlluminationSolver::estimateRadiance( const Ray _ray, const Scene& _scene, 
+void DirectIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene, 
 		std::vector< std::tuple<RGB, float> >& _samples )
 {
 	RayHit hit;
@@ -34,12 +34,11 @@ void DirectIlluminationSolver::estimateRadiance( const Ray _ray, const Scene& _s
 				{
 					std::shared_ptr<Object> obj = hit.obj;
 
-					glm::vec3 objNormal = obj->getNormalAt( hit.position );
-					float cosTheta = AbsDot(objNormal,shadowRay.direction);
+					DiffGeoData geo = obj->getDiffGeoDataAtPoint( hit.position );
+					float cosTheta = AbsDot(geo.normal,shadowRay.direction);
 
-					RGB radiance = obj->material->BRDF(
-							shadowRay.direction, _ray.direction,
-							objNormal) * lightHit.obj->material->emmitance;
+					RGB radiance = obj->material->bxdf->radiance( geo, shadowRay.direction, 
+							_ray.direction ) * lightHit.obj->material->emmitance;
 
 					radiance *= cosTheta;
 

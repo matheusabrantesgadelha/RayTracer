@@ -6,9 +6,12 @@
 class LambertianBRDF : public BxDF
 {
 public:
-	virtual void sample( DiffGeoData _geoData, glm::vec3 _in, glm::vec3& _out, float& _pdf );
-	virtual float pdf( DiffGeoData _geoData, glm::vec3 _in, glm::vec3 _out );
+	virtual RGB sample( const DiffGeoData _geoData, const glm::vec3 _in, glm::vec3& _out, float& _pdf );
+	virtual RGB radiance( const DiffGeoData _geoData, const glm::vec3 _in, const glm::vec3 _out );
+	virtual float pdf( const DiffGeoData _geoData, const glm::vec3 _in, const glm::vec3 _out );
 	virtual bool isDelta();
+
+	RGB albedo;
 };
 
 #endif

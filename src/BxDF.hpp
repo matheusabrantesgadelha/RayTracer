@@ -9,8 +9,9 @@ struct DiffGeoData;
 class BxDF
 {
 public:
-	virtual void sample( DiffGeoData _geoData, glm::vec3 _in, glm::vec3& _out, float& _pdf ) = 0;
-	virtual float pdf( DiffGeoData _geoData, glm::vec3 _in, glm::vec3 _out ) = 0;
+	virtual RGB sample( const DiffGeoData _geoData, const glm::vec3 _in, glm::vec3& _out, float& _pdf ) = 0;
+	virtual RGB radiance( const DiffGeoData _geoData, const glm::vec3 _in, const glm::vec3 _out ) = 0;
+	virtual float pdf( const DiffGeoData _geoData, const glm::vec3 _in, const glm::vec3 _out ) = 0;
 	virtual bool isDelta();
 };
 

@@ -15,6 +15,8 @@
 #include "DirectIlluminationSolver.hpp"
 #include "Sphere.hpp"
 #include "SimpleCamera.hpp"
+#include "LambertianBRDF.hpp"
+#include "MirrorBRDF.hpp"
 
 //#define RELEASE
 
@@ -45,12 +47,26 @@ int main( int argc, char** argv )
     std::string filename = "path_test.ppm";
 #endif
 
+	std::shared_ptr<LambertianBRDF> whiteDiffuseBRDF( new LambertianBRDF() );
+	whiteDiffuseBRDF->albedo = RGB(1,1,1);
+	std::shared_ptr<LambertianBRDF> redDiffuseBRDF( new LambertianBRDF() );
+	redDiffuseBRDF->albedo = RGB(1,0,0);
+	std::shared_ptr<LambertianBRDF> greenDiffuseBRDF( new LambertianBRDF() );
+	greenDiffuseBRDF->albedo = RGB(0,1,0);
+
+	std::shared_ptr<Material> whiteDiffuseMaterial( new Material());
+	whiteDiffuseMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( whiteDiffuseBRDF );
+	std::shared_ptr<Material> redDiffuseMaterial( new Material());
+	redDiffuseMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( redDiffuseBRDF );
+	std::shared_ptr<Material> greenDiffuseMaterial( new Material());
+	greenDiffuseMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( greenDiffuseBRDF );
+
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
 
 	std::shared_ptr<DirectIlluminationSolver> solver( new DirectIlluminationSolver() );
 
-    SimpleCamera camera( 320, 240, 
+    SimpleCamera camera( 320, 240,
 			std::dynamic_pointer_cast<IlluminationSolver>( solver ));
 
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
@@ -63,7 +79,7 @@ int main( int argc, char** argv )
     light->center = glm::vec3( 0, 20, -20);
     light->radius = 5.0f;
     light->material->albedo = RGB(1,1,1);
-    light->material->emmitance = 10.0f*RGB(1,1,0);
+    light->material->emmitance = RGB(1,1,1);
     light->material->power = 20.0f;
 
 //    std::shared_ptr<Sphere> light2( new Sphere() );
@@ -76,11 +92,13 @@ int main( int argc, char** argv )
     std::shared_ptr<Sphere> sphere1( new Sphere() );
     sphere1->center = glm::vec3( 15, -27, 0 );
     sphere1->radius = 13.0f;
+	sphere1->material = whiteDiffuseMaterial;
     sphere1->material->albedo = RGB(1,1,0);
 
     std::shared_ptr<Sphere> sphere2( new Sphere() );
     sphere2->center = glm::vec3( -20, -20, -20 );
     sphere2->radius = 20.0f;
+	sphere2->material = whiteDiffuseMaterial;
     sphere2->material->albedo = RGB(1.0,1.0,1.0);
 //    sphere2->material->reflectionSample = mirrorSample;
 //    sphere2->material->customBRDF = mirrorBRDF;
@@ -88,6 +106,7 @@ int main( int argc, char** argv )
     std::shared_ptr<Sphere> backWall( new Sphere() );
     backWall->center = glm::vec3( 0, 0, -100050 );
     backWall->radius = 100000.0f;
+	backWall->material = whiteDiffuseMaterial;
     backWall->material->albedo = RGB(1,1,1);
 //    backWall->material->reflectionSample = mirrorSample;
 //    backWall->material->customBRDF = mirrorBRDF;
@@ -100,22 +119,25 @@ int main( int argc, char** argv )
     std::shared_ptr<Sphere> leftWall( new Sphere() );
     leftWall->center = glm::vec3( -100040, 0, -1000);
     leftWall->radius = 100000.0f;
+	leftWall->material = redDiffuseMaterial;
     leftWall->material->albedo = RGB(1.0,0.0,0.0);
-
 
     std::shared_ptr<Sphere> rightWall( new Sphere() );
     rightWall->center = glm::vec3( 100040, 0, -1000);
     rightWall->radius = 100000.0f;
+	rightWall->material = greenDiffuseMaterial;
     rightWall->material->albedo = RGB(0.0,1.0,0.0);
 
     std::shared_ptr<Sphere> roof( new Sphere() );
     roof->center = glm::vec3( 0, 100040, 0);
     roof->radius = 100000.0f;
+	roof->material = whiteDiffuseMaterial;
     roof->material->albedo = RGB(1,1,1);
 
     std::shared_ptr<Sphere> almostPlane( new Sphere() );
     almostPlane->center = glm::vec3( 0, -100040, 0 );
     almostPlane->radius = 100000.0f;
+	almostPlane->material = whiteDiffuseMaterial;
     almostPlane->material->albedo = RGB(1,1,1);
 
     scene->addObject( std::dynamic_pointer_cast<Object>(sphere1) );
@@ -128,7 +150,6 @@ int main( int argc, char** argv )
     scene->addObject( std::dynamic_pointer_cast<Object>(light) );
 //    scene->addObject( std::dynamic_pointer_cast<Object>(light2) );
     scene->addObject( std::dynamic_pointer_cast<Object>(almostPlane) );
-
 
     camera.render( *scene );
 

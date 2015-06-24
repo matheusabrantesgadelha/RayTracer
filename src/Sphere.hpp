@@ -22,17 +22,11 @@ public:
     ~Sphere();
 
     virtual bool intersect( Ray _ray, RayHit& _hit );
-
     virtual glm::vec3 getNormalAt( glm::vec3 _p );
-
     virtual glm::vec3 getRandomSurfacePoint( float& _pdf );
-
 	virtual float getArea();
-
     virtual DiffGeoData getDiffGeoDataAtPoint( glm::vec3 _point ); 
-
     virtual DiffGeoData getSampledDiffGeoData( float& _pdf );
-
     float radius;
 };
 
