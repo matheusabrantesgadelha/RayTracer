@@ -66,8 +66,7 @@ int main( int argc, char** argv )
 
 	std::shared_ptr<DirectIlluminationSolver> solver( new DirectIlluminationSolver() );
 
-    SimpleCamera camera( 320, 240,
-			std::dynamic_pointer_cast<IlluminationSolver>( solver ));
+    SimpleCamera camera( 320, 240, std::dynamic_pointer_cast<IlluminationSolver>( solver ));
 
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
     camera.focalDistance = 15.0f;
