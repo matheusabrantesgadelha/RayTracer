@@ -20,43 +20,9 @@ void DirectIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 		{
 			Ray shadowRay;
 			shadowRay.origin = hit.position;
-
-			float pdf=1.0f;
-			DiffGeoData sampleLightGeo = lightObj->getSampledDiffGeoData(pdf);
-			
-			shadowRay.direction = glm::normalize( sampleLightGeo.point - shadowRay.origin );
-			RayHit lightHit;
-
-			if( _scene.intersect( shadowRay, lightHit ) )
-			{
-				if (glm::length(lightHit.position - sampleLightGeo.point ) < 0.00001f)
-//				if( lightHit.obj == lightObj )
-				{
-					std::shared_ptr<Object> obj = hit.obj;
-
-					DiffGeoData geo = obj->getDiffGeoDataAtPoint( hit.position );
-					float cosTheta = AbsDot(geo.normal,shadowRay.direction);
-
-					RGB radiance = obj->material->bxdf->radiance( geo, shadowRay.direction, 
-							_ray.direction ) * lightHit.obj->material->emmitance;
-
-					radiance *= cosTheta;
-
-					pdf = glm::length2( hit.position - sampleLightGeo.point ) /
-							( AbsDot( sampleLightGeo.normal, shadowRay.direction ) 
-							  * lightObj->getArea() );
-
-					_samples.push_back( std::make_tuple( radiance, pdf ));
-				}
-				else
-				{
-					_samples.push_back( std::make_tuple( RGB(0,0,0), pdf ) );
-				}
-			}
-			else
-			{
-				_samples.push_back( std::make_tuple( RGB(0,0,0), pdf ) );
-			}
+			std::tuple<RGB,float> sample;
+			lightContribution( hit.obj, lightObj, shadowRay, sample, _scene  );
+			_samples.push_back( sample );
 		}
 	}
 	else
@@ -65,3 +31,44 @@ void DirectIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 	}
 }
 
+bool DirectIlluminationSolver::lightContribution( std::shared_ptr<Object> _fromObj,
+		std::shared_ptr<Object> _light, Ray _ray, std::tuple<RGB, float>& _result, 
+		const Scene& _scene )
+{
+	float pdf=1.0f;
+	DiffGeoData sampleLightGeo = _light->getSampledDiffGeoData(pdf);
+	
+	_ray.direction = glm::normalize( sampleLightGeo.point - _ray.origin );
+	RayHit lightHit;
+
+	if( _scene.intersect( _ray, lightHit ) )
+	{
+		if (glm::length(lightHit.position - sampleLightGeo.point ) < 0.00001f)
+		{
+			DiffGeoData geo = _fromObj->getDiffGeoDataAtPoint( _ray.origin );
+			float cosTheta = AbsDot(geo.normal, _ray.direction);
+
+			RGB radiance = _fromObj->material->bxdf->radiance( geo, _ray.direction, 
+					_ray.direction ) * lightHit.obj->material->emmitance;
+
+			radiance *= cosTheta;
+
+			pdf = glm::length2( _ray.origin - sampleLightGeo.point ) /
+					( AbsDot( sampleLightGeo.normal, _ray.direction ) 
+					  * _light->getArea() );
+
+			_result = std::make_tuple( radiance, pdf );
+			return true;
+		}
+		else
+		{
+			_result = std::make_tuple( RGB(0,0,0), pdf );
+			return false;
+		}
+	}
+	else
+	{
+		_result = std::make_tuple( RGB(0,0,0), pdf );
+		return false;
+	}
+}
