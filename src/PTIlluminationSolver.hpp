@@ -2,7 +2,8 @@
 #ifndef PTILLUMINATIONSOLVER_H_ 
 #define PTILLUMINATIONSOLVER_H_ 
 
-#include "IlluminationSolver.hpp"
+#include "DirectIlluminationSolver.hpp"
+#include <list>
 
 class PTIlluminationSolver : public IlluminationSolver
 {
@@ -11,6 +12,11 @@ class PTIlluminationSolver : public IlluminationSolver
 
 	virtual void estimateRadiance( Ray _ray, const Scene& _scene, 
 			std::vector< std::tuple<RGB, float> >& _samples );
+
+	static void buildPath( unsigned int _pathSize, 
+			const Ray _startRay, 
+			const Scene& _scene,
+			std::list< RayHit >& _path );
 };
 
 #endif

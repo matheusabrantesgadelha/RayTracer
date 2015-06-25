@@ -38,12 +38,16 @@ struct RayHit
     RGB incomingRadiance;
     RGB irradiance;
     glm::vec3 geoTerm;
+
     glm::vec3 inDirection;
+
     glm::vec3 brdf;
     float distance;
     unsigned int objId;
     std::shared_ptr<Material> material;
     std::shared_ptr<Object> obj;
+
+	float pdf;
 };
 
 struct LightRay
