@@ -43,6 +43,13 @@ bool DirectIlluminationSolver::lightContribution( std::shared_ptr<Object> _fromO
 	ray.direction = glm::normalize( sampleLightGeo.point - ray.origin );
 	RayHit lightHit;
 
+	if( _fromObj == _light )
+	{
+		std::get<0>(_result) = _light->material->emmitance;
+		std::get<1>(_result) = 1.0f;
+		return false;
+	}
+
 	if( _scene.intersect( ray, lightHit ) )
 	{
 		if (glm::length(lightHit.position - sampleLightGeo.point ) < 0.00001f)

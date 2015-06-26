@@ -55,6 +55,8 @@ int main( int argc, char** argv )
 	std::shared_ptr<LambertianBRDF> greenDiffuseBRDF( new LambertianBRDF() );
 	greenDiffuseBRDF->albedo = RGB(0,1,0);
 
+	std::shared_ptr<MirrorBRDF> perfectMirrorBRDF( new MirrorBRDF() );
+
 	std::shared_ptr<Material> whiteDiffuseMaterial( new Material());
 	whiteDiffuseMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( whiteDiffuseBRDF );
 	std::shared_ptr<Material> redDiffuseMaterial( new Material());
@@ -62,12 +64,17 @@ int main( int argc, char** argv )
 	std::shared_ptr<Material> greenDiffuseMaterial( new Material());
 	greenDiffuseMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( greenDiffuseBRDF );
 
+	std::shared_ptr<Material> mirrorMaterial( new Material());
+	mirrorMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( perfectMirrorBRDF );
+
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
 
 	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(3) );
 
-    SimpleCamera camera( 320, 240, std::dynamic_pointer_cast<IlluminationSolver>( solver ));
+    SimpleCamera camera( 320, 240, 
+			std::dynamic_pointer_cast<IlluminationSolver>( solver ), 
+			100);
 
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
     camera.focalDistance = 15.0f;
@@ -92,8 +99,8 @@ int main( int argc, char** argv )
     std::shared_ptr<Sphere> sphere1( new Sphere() );
     sphere1->center = glm::vec3( 15, -27, 0 );
     sphere1->radius = 13.0f;
-	sphere1->material = whiteDiffuseMaterial;
-    sphere1->material->albedo = RGB(1,1,0);
+	sphere1->material = mirrorMaterial;
+    sphere1->material->albedo = RGB(1,1,1);
 
     std::shared_ptr<Sphere> sphere2( new Sphere() );
     sphere2->center = glm::vec3( -20, -20, -20 );

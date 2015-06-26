@@ -28,8 +28,10 @@ void PTIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 					hit.obj, light, hit.position, sample, _scene );
 			std::get<0>(sample) *= pathThroughput;
 			std::get<1>(sample) *= pathPDF;
+
+//			std::get<0>(sample) += hit.obj->material->emmitance;
 			
-			_samples.push_back( sample );
+			if( std::get<1>(sample) > 0.0f ) _samples.push_back( sample );
 
 			pathThroughput *= hit.throughput;
 			pathPDF *= hit.pdf;
