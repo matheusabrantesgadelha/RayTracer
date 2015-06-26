@@ -7,7 +7,8 @@
 
 class PTIlluminationSolver : public IlluminationSolver
 {
-	PTIlluminationSolver();
+public:
+	PTIlluminationSolver( unsigned int _pathSize );
 	~PTIlluminationSolver();
 
 	virtual void estimateRadiance( Ray _ray, const Scene& _scene, 
@@ -17,6 +18,9 @@ class PTIlluminationSolver : public IlluminationSolver
 			const Ray _startRay, 
 			const Scene& _scene,
 			std::list< RayHit >& _path );
+
+private:
+	unsigned int pathSize;
 };
 
 #endif

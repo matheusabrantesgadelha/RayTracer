@@ -17,6 +17,7 @@
 #include "SimpleCamera.hpp"
 #include "LambertianBRDF.hpp"
 #include "MirrorBRDF.hpp"
+#include "PTIlluminationSolver.hpp"
 
 //#define RELEASE
 
@@ -64,7 +65,7 @@ int main( int argc, char** argv )
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
 
-	std::shared_ptr<DirectIlluminationSolver> solver( new DirectIlluminationSolver() );
+	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(3) );
 
     SimpleCamera camera( 320, 240, std::dynamic_pointer_cast<IlluminationSolver>( solver ));
 
@@ -78,7 +79,7 @@ int main( int argc, char** argv )
     light->center = glm::vec3( 0, 20, -20);
     light->radius = 5.0f;
     light->material->albedo = RGB(1,1,1);
-    light->material->emmitance = RGB(1,1,1);
+    light->material->emmitance = 10.0f*RGB(1,1,1);
     light->material->power = 20.0f;
 
 //    std::shared_ptr<Sphere> light2( new Sphere() );

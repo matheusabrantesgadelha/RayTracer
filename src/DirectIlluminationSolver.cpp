@@ -21,7 +21,7 @@ void DirectIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 			Ray shadowRay;
 			shadowRay.origin = hit.position;
 			std::tuple<RGB,float> sample;
-			lightContribution( hit.obj, lightObj, shadowRay, sample, _scene  );
+			lightContribution( hit.obj, lightObj, shadowRay.origin, sample, _scene  );
 			_samples.push_back( sample );
 		}
 	}
@@ -32,29 +32,31 @@ void DirectIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 }
 
 bool DirectIlluminationSolver::lightContribution( std::shared_ptr<Object> _fromObj,
-		std::shared_ptr<Object> _light, Ray _ray, std::tuple<RGB, float>& _result, 
+		std::shared_ptr<Object> _light, glm::vec3 _fromPos, std::tuple<RGB, float>& _result, 
 		const Scene& _scene )
 {
 	float pdf=1.0f;
 	DiffGeoData sampleLightGeo = _light->getSampledDiffGeoData(pdf);
+	Ray ray;
+	ray.origin = _fromPos;
 	
-	_ray.direction = glm::normalize( sampleLightGeo.point - _ray.origin );
+	ray.direction = glm::normalize( sampleLightGeo.point - ray.origin );
 	RayHit lightHit;
 
-	if( _scene.intersect( _ray, lightHit ) )
+	if( _scene.intersect( ray, lightHit ) )
 	{
 		if (glm::length(lightHit.position - sampleLightGeo.point ) < 0.00001f)
 		{
-			DiffGeoData geo = _fromObj->getDiffGeoDataAtPoint( _ray.origin );
-			float cosTheta = AbsDot(geo.normal, _ray.direction);
+			DiffGeoData geo = _fromObj->getDiffGeoDataAtPoint( ray.origin );
+			float cosTheta = AbsDot(geo.normal, ray.direction);
 
-			RGB radiance = _fromObj->material->bxdf->radiance( geo, _ray.direction, 
-					_ray.direction ) * lightHit.obj->material->emmitance;
+			RGB radiance = _fromObj->material->bxdf->radiance( geo, ray.direction, 
+					ray.direction ) * lightHit.obj->material->emmitance;
 
 			radiance *= cosTheta;
 
-			pdf = glm::length2( _ray.origin - sampleLightGeo.point ) /
-					( AbsDot( sampleLightGeo.normal, _ray.direction ) 
+			pdf = glm::length2( ray.origin - sampleLightGeo.point ) /
+					( AbsDot( sampleLightGeo.normal, ray.direction ) 
 					  * _light->getArea() );
 
 			_result = std::make_tuple( radiance, pdf );

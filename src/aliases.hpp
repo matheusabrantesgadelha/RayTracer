@@ -48,6 +48,7 @@ struct RayHit
     std::shared_ptr<Object> obj;
 
 	float pdf;
+	RGB throughput;
 };
 
 struct LightRay

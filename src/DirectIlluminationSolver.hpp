@@ -15,7 +15,7 @@ public:
 			std::vector< std::tuple<RGB, float> >& _samples );
 	
 	static bool lightContribution( std::shared_ptr<Object> _fromObj,
-		std::shared_ptr<Object> _light, Ray _ray, std::tuple<RGB, float>& _result, 
+		std::shared_ptr<Object> _light, glm::vec3 _fromPos, std::tuple<RGB, float>& _result, 
 		const Scene& _scene );
 };
 
