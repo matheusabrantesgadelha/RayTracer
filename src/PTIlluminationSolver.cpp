@@ -29,12 +29,11 @@ void PTIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 			std::get<0>(sample) *= pathThroughput;
 			std::get<1>(sample) *= pathPDF;
 
-//			std::get<0>(sample) += hit.obj->material->emmitance;
-			
-			if( std::get<1>(sample) > 0.0f ) _samples.push_back( sample );
-
-			pathThroughput *= hit.throughput;
+			if( std::get<1>(sample) > 0.0f ){
+				_samples.push_back( sample );
+			}
 			pathPDF *= hit.pdf;
+			pathThroughput *= hit.throughput;
 		}
 	}
 }
@@ -60,7 +59,7 @@ void PTIlluminationSolver::buildPath(
 			float pdf;
 
 			RGB bxdfResult = hit.obj->material->bxdf->sample( geo, in, out, pdf );
-			float cosTheta = AbsDot( in, out );
+			float cosTheta = AbsDot( in, out );	
 			_path.back().pdf = pdf;
 			_path.back().throughput = cosTheta * bxdfResult;
 

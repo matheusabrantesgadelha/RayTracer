@@ -3,7 +3,7 @@
 SimpleCamera::SimpleCamera(  const unsigned int _res_width, const unsigned int _res_height,
 		const std::shared_ptr<IlluminationSolver> _solver, const unsigned int _nSamples ) :
 	Camera( _res_width, _res_height, _solver ),
-	samples( _nSamples )
+	nSamples( _nSamples )
 {}
 
 void SimpleCamera::render( Scene& _scene )
@@ -13,7 +13,7 @@ void SimpleCamera::render( Scene& _scene )
 		for( size_t j=0; j<rays[i].size(); ++j )
 		{
 			std::vector< std::tuple<RGB,float> > samples;
-			for( size_t s=0; s<100; ++s )
+			for( size_t s=0; s<nSamples; ++s )
 				solver->estimateRadiance( rays[i][j], _scene, samples );
 
 			RGB finalColor;

@@ -14,7 +14,7 @@ public:
 	virtual void render( Scene& _scene );
 
 private:
-	unsigned int samples;
+	unsigned int nSamples;
 };
 
 #endif

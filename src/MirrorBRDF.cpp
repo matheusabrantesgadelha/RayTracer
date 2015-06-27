@@ -2,24 +2,26 @@
 
 RGB MirrorBRDF::sample( DiffGeoData _geoData, glm::vec3 _in, glm::vec3& _out, float& _pdf )
 {
-	glm::vec3 reflected = glm::reflect( -_in, _geoData.normal);
+	glm::vec3 reflected = glm::reflect( _in, _geoData.normal);
 	_out = reflected;
-	_pdf = pdf( _geoData, _in, _out ) ;
+	_pdf = 1.0f;
 
-	return RGB(1,1,1);
+	return RGB(1,1,1)/AbsDot(_in,_out);
 }
 
 RGB MirrorBRDF::radiance( const DiffGeoData _geoData, const glm::vec3 _in, const glm::vec3 _out )
 {
-	if(pdf( _geoData, _in, _out )) return RGB(1,1,1);
-	else return RGB(0,0,0);
+	return RGB(0,0,0);
+//	if(pdf( _geoData, _in, _out )) return RGB(1,1,1);
+//	else return RGB(0,0,0);
 }
 
 float MirrorBRDF::pdf( const DiffGeoData _geoData, const glm::vec3 _in, const glm::vec3 _out )
 {
-	glm::vec3 reflected = glm::reflect( -_in, _geoData.normal);
-	if(glm::dot( reflected, _out ) - 1.0f < 0.0001f ) return 1.0f;
-	else return 0.0f;
+	return 0.0f;
+//	glm::vec3 reflected = glm::reflect( _in, _geoData.normal);
+//	if(std::abs(glm::dot( _out, reflected )) >= 0.999f ) return 1.0f;
+//	else return 0.0f;
 }
 
 bool MirrorBRDF::isDelta(){ 

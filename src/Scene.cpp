@@ -13,14 +13,12 @@ Scene::~Scene()
 
 void Scene::addObject( std::shared_ptr<Object> _obj )
 {
-
     _obj->id = objects.size();
     _obj->scene = getptr();
     objects.push_back( _obj );
 
     if( glm::length(_obj->material->emmitance) > 0.0001f )
         lights.push_back( _obj );
-
 }
 
 

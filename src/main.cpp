@@ -70,11 +70,11 @@ int main( int argc, char** argv )
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
 
-	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(3) );
+	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(4) );
 
     SimpleCamera camera( 320, 240, 
 			std::dynamic_pointer_cast<IlluminationSolver>( solver ), 
-			100);
+			10);
 
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
     camera.focalDistance = 15.0f;
@@ -83,10 +83,10 @@ int main( int argc, char** argv )
     std::shared_ptr<Scene> scene( new Scene() );
 
     std::shared_ptr<Sphere> light( new Sphere() );
-    light->center = glm::vec3( 0, 20, -20);
+    light->center = glm::vec3( 0, 37, -20);
     light->radius = 5.0f;
     light->material->albedo = RGB(1,1,1);
-    light->material->emmitance = 10.0f*RGB(1,1,1);
+    light->material->emmitance = 30.0f*RGB(1,1,1);
     light->material->power = 20.0f;
 
 //    std::shared_ptr<Sphere> light2( new Sphere() );
@@ -105,7 +105,7 @@ int main( int argc, char** argv )
     std::shared_ptr<Sphere> sphere2( new Sphere() );
     sphere2->center = glm::vec3( -20, -20, -20 );
     sphere2->radius = 20.0f;
-	sphere2->material = whiteDiffuseMaterial;
+	sphere2->material = mirrorMaterial;
     sphere2->material->albedo = RGB(1.0,1.0,1.0);
 //    sphere2->material->reflectionSample = mirrorSample;
 //    sphere2->material->customBRDF = mirrorBRDF;
