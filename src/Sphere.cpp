@@ -21,7 +21,11 @@ bool Sphere::intersect( Ray _ray, RayHit& _hit )
         return false;
 
     float distInter = sqrt( pow(radius,2) - pow(glm::length( proj_point - center ),2) );
-    float di = glm::length( proj_point - _ray.origin ) - distInter;
+	float di;
+	if( glm::length( origin_center ) > radius )
+		di = glm::length( proj_point - _ray.origin ) - distInter;
+	else
+		di = glm::length( proj_point - _ray.origin ) + distInter;
 
     glm::vec3 intersection = _ray.origin + di*_ray.direction;
     _hit.position = intersection;

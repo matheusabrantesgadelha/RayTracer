@@ -18,6 +18,7 @@
 #include "LambertianBRDF.hpp"
 #include "MirrorBRDF.hpp"
 #include "PTIlluminationSolver.hpp"
+#include "PerfectRefractionBTDF.hpp"
 
 //#define RELEASE
 
@@ -56,6 +57,7 @@ int main( int argc, char** argv )
 	greenDiffuseBRDF->albedo = RGB(0,1,0);
 
 	std::shared_ptr<MirrorBRDF> perfectMirrorBRDF( new MirrorBRDF() );
+	std::shared_ptr<PerfectRefractionBTDF> perfectRefractionGlass( new PerfectRefractionBTDF(1.0f/1.5f) );
 
 	std::shared_ptr<Material> whiteDiffuseMaterial( new Material());
 	whiteDiffuseMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( whiteDiffuseBRDF );
@@ -66,15 +68,17 @@ int main( int argc, char** argv )
 
 	std::shared_ptr<Material> mirrorMaterial( new Material());
 	mirrorMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( perfectMirrorBRDF );
+	std::shared_ptr<Material> glassMaterial( new Material());
+	glassMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( perfectRefractionGlass );
 
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
 
 	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(4) );
 
-    SimpleCamera camera( 320, 240, 
+    SimpleCamera camera( 640, 480, 
 			std::dynamic_pointer_cast<IlluminationSolver>( solver ), 
-			10);
+			1000);
 
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
     camera.focalDistance = 15.0f;
@@ -100,12 +104,11 @@ int main( int argc, char** argv )
     sphere1->center = glm::vec3( 15, -27, 0 );
     sphere1->radius = 13.0f;
 	sphere1->material = mirrorMaterial;
-    sphere1->material->albedo = RGB(1,1,1);
 
     std::shared_ptr<Sphere> sphere2( new Sphere() );
     sphere2->center = glm::vec3( -20, -20, -20 );
     sphere2->radius = 20.0f;
-	sphere2->material = mirrorMaterial;
+	sphere2->material = glassMaterial;
     sphere2->material->albedo = RGB(1.0,1.0,1.0);
 //    sphere2->material->reflectionSample = mirrorSample;
 //    sphere2->material->customBRDF = mirrorBRDF;
