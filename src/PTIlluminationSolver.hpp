@@ -4,6 +4,7 @@
 
 #include "DirectIlluminationSolver.hpp"
 #include <list>
+#include "gtc/random.hpp"
 
 class PTIlluminationSolver : public IlluminationSolver
 {
@@ -18,6 +19,10 @@ public:
 			const Ray _startRay, 
 			const Scene& _scene,
 			std::list< RayHit >& _path );
+	
+	static bool russianRoulette( float _probability );
+
+	static float maxRadiance( RGB _radiance );
 
 private:
 	unsigned int pathSize;

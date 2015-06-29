@@ -45,6 +45,7 @@ void PTIlluminationSolver::buildPath(
 		std::list< RayHit >& _path )
 {
 	Ray currentRay = _startRay;
+	RGB cumulativeThroughput = RGB(1,1,1);
 	for( unsigned int i=0; i<_pathSize; ++i )
 	{
 		RayHit hit;
@@ -62,6 +63,11 @@ void PTIlluminationSolver::buildPath(
 			float cosTheta = AbsDot( in, out );	
 			_path.back().pdf = pdf;
 			_path.back().throughput = cosTheta * bxdfResult;
+			cumulativeThroughput *= _path.back().throughput;
+
+			float q = cosTheta;
+			if( !russianRoulette( q ) ) break;
+			_path.back().throughput = (cosTheta * bxdfResult)/ q;
 
 			currentRay.origin = hit.position;
 			currentRay.direction = out;
@@ -69,3 +75,19 @@ void PTIlluminationSolver::buildPath(
 		else break;
 	}
 }
+
+bool PTIlluminationSolver::russianRoulette( float _probability )
+{
+	if(glm::linearRand(0.0f,1.0f) < _probability) return true;
+	else return false;
+}
+
+float PTIlluminationSolver::maxRadiance( RGB _radiance )
+{
+	if( _radiance.r >= _radiance.g && _radiance.r >= _radiance.b )
+		return _radiance.r;
+	if( _radiance.g >= _radiance.r && _radiance.g >= _radiance.b )
+		return _radiance.g;
+	return _radiance.b;
+}
+

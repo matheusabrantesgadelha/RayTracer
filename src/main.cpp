@@ -74,11 +74,11 @@ int main( int argc, char** argv )
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
 
-	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(4) );
+	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(8) );
 
-    SimpleCamera camera( 640, 480, 
+    SimpleCamera camera( 320, 240, 
 			std::dynamic_pointer_cast<IlluminationSolver>( solver ), 
-			1000);
+			10);
 
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
     camera.focalDistance = 15.0f;
