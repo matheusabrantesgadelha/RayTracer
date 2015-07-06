@@ -11,6 +11,7 @@ RGB PerfectRefractionBTDF::sample( DiffGeoData _geoData, glm::vec3 _in, glm::vec
 	if( glm::dot(_geoData.normal, _in) > 0.0f)
 	{
 		_geoData.normal = -_geoData.normal;
+//		_in = -_in;
 		refracted = glm::refract( _in, _geoData.normal, 1.0f/refractionRatio);
 	}
 	else{

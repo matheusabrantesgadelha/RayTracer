@@ -4,7 +4,7 @@ CFLAGS = -Wall -std=c++11 -ggdb -O3 -fopenmp
 
 INCLUDES = -Iglm
 
-OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o MultiSampledCamera.o DiffGeomData.o IlluminationSolver.o DirectIlluminationSolver.o SimpleCamera.o BxDF.o MirrorBRDF.o LambertianBRDF.o PTIlluminationSolver.o PerfectRefractionBTDF.o
+OBJS = ImageWriter.o Camera.o Scene.o Sphere.o Material.o Object.o MultiSampledCamera.o DiffGeomData.o IlluminationSolver.o DirectIlluminationSolver.o SimpleCamera.o BxDF.o MirrorBRDF.o LambertianBRDF.o PTIlluminationSolver.o PerfectRefractionBTDF.o Fresnel.o FresnelDieletric.o FresnelConductor.o
 
 all: src/main.cpp src/tst/tstBxDF.cpp $(OBJS)
 	$(CC) $(CFLAGS) src/main.cpp $(OBJS) -o bin/main $(INCLUDES)
@@ -57,6 +57,15 @@ PTIlluminationSolver.o: src/PTIlluminationSolver.cpp
 
 PerfectRefractionBTDF.o: src/PerfectRefractionBTDF.cpp
 	$(CC) $(CFLAGS) -c src/PerfectRefractionBTDF.cpp $(INCLUDES)
+
+Fresnel.o: src/Fresnel.cpp
+	$(CC) $(CFLAGS) -c src/Fresnel.cpp $(INCLUDES)
+
+FresnelDieletric.o: src/FresnelDieletric.cpp
+	$(CC) $(CFLAGS) -c src/FresnelDieletric.cpp $(INCLUDES)
+
+FresnelConductor.o: src/FresnelConductor.cpp
+	$(CC) $(CFLAGS) -c src/FresnelConductor.cpp $(INCLUDES)
 
 clean:
 	rm *.o

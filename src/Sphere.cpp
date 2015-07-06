@@ -11,28 +11,28 @@ Sphere::~Sphere()
 
 bool Sphere::intersect( Ray _ray, RayHit& _hit )
 {
-    glm::vec3 origin_center = center - _ray.origin;
-    if( glm::dot( origin_center, _ray.direction ) <= 0.0f )
-        return false;
+	const glm::vec3 oc = center - _ray.origin;
+	bool isInside = false;
+	if( std::abs(glm::length( oc )-radius) <= 0.0001f )
+		isInside = true;
 
-    glm::vec3 proj_ray = glm::proj( origin_center, _ray.direction );
-    glm::vec3 proj_point = proj_ray + _ray.origin;
-    if( glm::length( center-proj_point ) > radius )
-        return false;
-
-    float distInter = sqrt( pow(radius,2) - pow(glm::length( proj_point - center ),2) );
-	float di;
-	if( glm::length( origin_center ) > radius )
-		di = glm::length( proj_point - _ray.origin ) - distInter;
+	float tc = glm::dot(_ray.direction, oc);
+	float thc, thc2, t;
+	if( tc < 0 ) return false;
 	else
-		di = glm::length( proj_point - _ray.origin ) + distInter;
-
-    glm::vec3 intersection = _ray.origin + di*_ray.direction;
-    _hit.position = intersection;
-
-    _hit.color = material->albedo;
-
-    return true;
+	{
+		thc2 = radius*radius - glm::length2(oc) + tc*tc;
+		if( thc2 < 0 ) return false;
+		else
+		{
+			thc = std::sqrt( thc2 );
+			if( isInside )
+				t = tc + thc;				
+			else t = tc - thc;
+			_hit.position = _ray.origin + t*_ray.direction;
+			return true;
+		}
+	}
 }
 
 glm::vec3 Sphere::getNormalAt( glm::vec3 _p )

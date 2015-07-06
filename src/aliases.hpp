@@ -66,6 +66,11 @@ inline float AbsDot( glm::vec3 a, glm::vec3 b )
 	return val;
 }
 
+inline glm::vec3 HalfwayVec( const glm::vec3 _light, const glm::vec3 _view )
+{
+	return glm::normalize( _light + _view );
+}
+
 inline void PrintVec( glm::vec3 v )
 {
 	std::cout << v.r << " " << v.g << " " << v.b << std::endl;

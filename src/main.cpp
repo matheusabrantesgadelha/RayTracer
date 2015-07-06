@@ -55,6 +55,8 @@ int main( int argc, char** argv )
 	redDiffuseBRDF->albedo = RGB(1,0,0);
 	std::shared_ptr<LambertianBRDF> greenDiffuseBRDF( new LambertianBRDF() );
 	greenDiffuseBRDF->albedo = RGB(0,1,0);
+	std::shared_ptr<LambertianBRDF> cyanDiffuseBRDF( new LambertianBRDF() );
+	cyanDiffuseBRDF->albedo = RGB(0,1,1);
 
 	std::shared_ptr<MirrorBRDF> perfectMirrorBRDF( new MirrorBRDF() );
 	std::shared_ptr<PerfectRefractionBTDF> perfectRefractionGlass( new PerfectRefractionBTDF(1.0f/1.5f) );
@@ -65,6 +67,8 @@ int main( int argc, char** argv )
 	redDiffuseMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( redDiffuseBRDF );
 	std::shared_ptr<Material> greenDiffuseMaterial( new Material());
 	greenDiffuseMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( greenDiffuseBRDF );
+	std::shared_ptr<Material> cyanDiffuseMaterial( new Material());
+	cyanDiffuseMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( cyanDiffuseBRDF );
 
 	std::shared_ptr<Material> mirrorMaterial( new Material());
 	mirrorMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( perfectMirrorBRDF );
@@ -74,7 +78,7 @@ int main( int argc, char** argv )
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
 
-	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(8) );
+	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(9) );
 
     SimpleCamera camera( 320, 240, 
 			std::dynamic_pointer_cast<IlluminationSolver>( solver ), 
@@ -87,7 +91,7 @@ int main( int argc, char** argv )
     std::shared_ptr<Scene> scene( new Scene() );
 
     std::shared_ptr<Sphere> light( new Sphere() );
-    light->center = glm::vec3( 0, 37, -20);
+    light->center = glm::vec3( 0, 30, -20);
     light->radius = 5.0f;
     light->material->albedo = RGB(1,1,1);
     light->material->emmitance = 30.0f*RGB(1,1,1);
@@ -101,14 +105,14 @@ int main( int argc, char** argv )
 //    light2->material->power = 30.0f;
 
     std::shared_ptr<Sphere> sphere1( new Sphere() );
-    sphere1->center = glm::vec3( 15, -27, 0 );
-    sphere1->radius = 13.0f;
-	sphere1->material = mirrorMaterial;
+    sphere1->center = glm::vec3( 20, -30, -10 );
+    sphere1->radius = 10.0f;
+	sphere1->material = glassMaterial;
 
     std::shared_ptr<Sphere> sphere2( new Sphere() );
     sphere2->center = glm::vec3( -20, -20, -20 );
     sphere2->radius = 20.0f;
-	sphere2->material = glassMaterial;
+	sphere2->material = cyanDiffuseMaterial;
     sphere2->material->albedo = RGB(1.0,1.0,1.0);
 //    sphere2->material->reflectionSample = mirrorSample;
 //    sphere2->material->customBRDF = mirrorBRDF;
