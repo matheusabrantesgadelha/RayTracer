@@ -6,11 +6,11 @@
 class FresnelConductor : public Fresnel
 {
 public:
-	FresnelConductor( const float _eta, const float _k );
+	FresnelConductor( const RGB _eta, const RGB _k );
 	virtual RGB evaluate( const float _cosi );
 private:
-	float eta;
-	float k;
+	RGB eta;
+	RGB k;
 };
 
 #endif

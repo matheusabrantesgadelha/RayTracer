@@ -4,6 +4,11 @@ MirrorBRDF::MirrorBRDF() : BxDF()
 {
 }
 
+MirrorBRDF::MirrorBRDF( std::shared_ptr<FresnelConductor> _fresnel )
+	: BxDF( std::dynamic_pointer_cast<Fresnel>(_fresnel))
+{
+}
+
 RGB MirrorBRDF::sample( DiffGeoData _geoData, glm::vec3 _in, glm::vec3& _out, float& _pdf )
 {
 	glm::vec3 reflected = glm::reflect( _in, _geoData.normal);
@@ -11,7 +16,7 @@ RGB MirrorBRDF::sample( DiffGeoData _geoData, glm::vec3 _in, glm::vec3& _out, fl
 	_pdf = 1.0f;
 	float cosTheta = AbsDot(_in,_out);
 
-	return RGB(1,1,1)/cosTheta;
+	return fresnel->evaluate(AbsDot(_in,_geoData.normal))*RGB(1,1,1)/cosTheta;
 }
 
 RGB MirrorBRDF::radiance( const DiffGeoData , const glm::vec3 , const glm::vec3 )

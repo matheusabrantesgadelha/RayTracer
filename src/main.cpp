@@ -49,6 +49,10 @@ int main( int argc, char** argv )
     std::string filename = "path_test.ppm";
 #endif
 
+	RGB steelEta( 2.485f,2.485f,2.485f );
+	RGB steelK( 3.433f,3.433f,3.433f );
+	std::shared_ptr<FresnelConductor> steelFresnel( new FresnelConductor( steelEta, steelK) );
+
 	std::shared_ptr<LambertianBRDF> whiteDiffuseBRDF( new LambertianBRDF() );
 	whiteDiffuseBRDF->albedo = RGB(1,1,1);
 	std::shared_ptr<LambertianBRDF> redDiffuseBRDF( new LambertianBRDF() );
@@ -58,7 +62,7 @@ int main( int argc, char** argv )
 	std::shared_ptr<LambertianBRDF> cyanDiffuseBRDF( new LambertianBRDF() );
 	cyanDiffuseBRDF->albedo = RGB(0,1,1);
 
-	std::shared_ptr<MirrorBRDF> perfectMirrorBRDF( new MirrorBRDF() );
+	std::shared_ptr<MirrorBRDF> perfectMirrorBRDF( new MirrorBRDF( steelFresnel ) );
 	std::shared_ptr<PerfectRefractionBTDF> perfectRefractionGlass( new PerfectRefractionBTDF(1.0f/1.5f) );
 
 	std::shared_ptr<Material> whiteDiffuseMaterial( new Material());
@@ -74,6 +78,7 @@ int main( int argc, char** argv )
 	mirrorMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( perfectMirrorBRDF );
 	std::shared_ptr<Material> glassMaterial( new Material());
 	glassMaterial->bxdf = std::dynamic_pointer_cast<BxDF>( perfectRefractionGlass );
+
 
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
@@ -112,7 +117,7 @@ int main( int argc, char** argv )
     std::shared_ptr<Sphere> sphere2( new Sphere() );
     sphere2->center = glm::vec3( -20, -20, -20 );
     sphere2->radius = 20.0f;
-	sphere2->material = cyanDiffuseMaterial;
+	sphere2->material = mirrorMaterial;
     sphere2->material->albedo = RGB(1.0,1.0,1.0);
 //    sphere2->material->reflectionSample = mirrorSample;
 //    sphere2->material->customBRDF = mirrorBRDF;
