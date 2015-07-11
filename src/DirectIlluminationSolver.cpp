@@ -52,7 +52,7 @@ bool DirectIlluminationSolver::lightContribution( std::shared_ptr<Object> _fromO
 
 	if( _scene.intersect( ray, lightHit ) )
 	{
-		if (glm::length(lightHit.position - sampleLightGeo.point ) < 0.00001f)
+		if (glm::length(lightHit.position - sampleLightGeo.point ) < 0.0001f)
 		{
 			DiffGeoData geo = _fromObj->getDiffGeoDataAtPoint( ray.origin );
 			float cosTheta = AbsDot(geo.normal, ray.direction);

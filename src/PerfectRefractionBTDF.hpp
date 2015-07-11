@@ -2,6 +2,7 @@
 #define PERFECTREFRACTIONBTDF_H_ 
 
 #include "BxDF.hpp"
+#include "FresnelDieletric.hpp"
 
 class PerfectRefractionBTDF : public BxDF
 {	

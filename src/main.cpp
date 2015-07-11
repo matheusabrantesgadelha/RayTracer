@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include <vector>
 
 #include <cstdlib>
@@ -49,9 +50,9 @@ int main( int argc, char** argv )
     std::string filename = "path_test.ppm";
 #endif
 
-	RGB steelEta( 2.485f,2.485f,2.485f );
-	RGB steelK( 3.433f,3.433f,3.433f );
-	std::shared_ptr<FresnelConductor> steelFresnel( new FresnelConductor( steelEta, steelK) );
+	RGB silverEta( 0.177f );
+	RGB silverK( 3.638f );
+	std::shared_ptr<FresnelConductor> silverFresnel( new FresnelConductor( silverEta, silverK) );
 
 	std::shared_ptr<LambertianBRDF> whiteDiffuseBRDF( new LambertianBRDF() );
 	whiteDiffuseBRDF->albedo = RGB(1,1,1);
@@ -62,7 +63,7 @@ int main( int argc, char** argv )
 	std::shared_ptr<LambertianBRDF> cyanDiffuseBRDF( new LambertianBRDF() );
 	cyanDiffuseBRDF->albedo = RGB(0,1,1);
 
-	std::shared_ptr<MirrorBRDF> perfectMirrorBRDF( new MirrorBRDF( steelFresnel ) );
+	std::shared_ptr<MirrorBRDF> perfectMirrorBRDF( new MirrorBRDF( silverFresnel ) );
 	std::shared_ptr<PerfectRefractionBTDF> perfectRefractionGlass( new PerfectRefractionBTDF(1.0f/1.5f) );
 
 	std::shared_ptr<Material> whiteDiffuseMaterial( new Material());
@@ -85,9 +86,9 @@ int main( int argc, char** argv )
 
 	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(9) );
 
-    SimpleCamera camera( 320, 240, 
+    SimpleCamera camera( 640, 480, 
 			std::dynamic_pointer_cast<IlluminationSolver>( solver ), 
-			10);
+			100);
 
     camera.planeSize = 2.0f*glm::vec2( 6.4f, 4.8f );
     camera.focalDistance = 15.0f;

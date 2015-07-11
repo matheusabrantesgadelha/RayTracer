@@ -15,8 +15,7 @@ RGB MirrorBRDF::sample( DiffGeoData _geoData, glm::vec3 _in, glm::vec3& _out, fl
 	_out = reflected;
 	_pdf = 1.0f;
 	float cosTheta = AbsDot(_in,_out);
-
-	return fresnel->evaluate(AbsDot(_in,_geoData.normal))*RGB(1,1,1)/cosTheta;
+	return fresnel->evaluate(glm::dot(_in,_out))*RGB(1,1,1)/cosTheta;
 }
 
 RGB MirrorBRDF::radiance( const DiffGeoData , const glm::vec3 , const glm::vec3 )
