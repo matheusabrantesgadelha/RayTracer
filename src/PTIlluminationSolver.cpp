@@ -51,8 +51,17 @@ void PTIlluminationSolver::buildPath(
 		RayHit hit;
 		if( _scene.intersect( currentRay, hit ) )
 		{
+			hit.inDirection = currentRay.direction;
 			_path.push_back( hit );
-			if( hit.obj->isLight() ) break;
+
+			if( hit.obj->isLight() ){
+				_path.back().source = true;
+				break;
+			}
+			else
+			{
+				_path.back().source = false;
+			}
 
 			DiffGeoData geo = hit.obj->getDiffGeoDataAtPoint( hit.position );
 			glm::vec3 in = currentRay.direction;

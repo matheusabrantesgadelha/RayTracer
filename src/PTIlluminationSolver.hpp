@@ -1,4 +1,3 @@
- 
 #ifndef PTILLUMINATIONSOLVER_H_ 
 #define PTILLUMINATIONSOLVER_H_ 
 
@@ -19,7 +18,7 @@ public:
 			const Ray _startRay, 
 			const Scene& _scene,
 			std::list< RayHit >& _path );
-	
+
 	static bool russianRoulette( float _probability );
 
 	static float maxRadiance( RGB _radiance );

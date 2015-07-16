@@ -52,7 +52,8 @@ bool DirectIlluminationSolver::lightContribution( std::shared_ptr<Object> _fromO
 
 	if( _scene.intersect( ray, lightHit ) )
 	{
-		if (glm::length(lightHit.position - sampleLightGeo.point ) < 0.0001f)
+//		if (glm::length(lightHit.position - sampleLightGeo.point ) < 0.00l)
+		if ( lightHit.obj == _light )
 		{
 			DiffGeoData geo = _fromObj->getDiffGeoDataAtPoint( ray.origin );
 			float cosTheta = AbsDot(geo.normal, ray.direction);
@@ -62,7 +63,7 @@ bool DirectIlluminationSolver::lightContribution( std::shared_ptr<Object> _fromO
 
 			radiance *= cosTheta;
 
-			pdf = glm::length2( ray.origin - sampleLightGeo.point ) /
+			pdf *= glm::length2( ray.origin - sampleLightGeo.point ) /
 					( AbsDot( sampleLightGeo.normal, ray.direction ) 
 					  * _light->getArea() );
 
@@ -81,3 +82,4 @@ bool DirectIlluminationSolver::lightContribution( std::shared_ptr<Object> _fromO
 		return false;
 	}
 }
+

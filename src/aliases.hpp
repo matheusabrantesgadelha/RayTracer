@@ -21,6 +21,7 @@ typedef glm::vec4 RGBA;
 
 class Material;
 class Object;
+struct DiffGeoData;
 
 struct Ray
 {
@@ -46,9 +47,11 @@ struct RayHit
     unsigned int objId;
     std::shared_ptr<Material> material;
     std::shared_ptr<Object> obj;
+	DiffGeoData * geoData;
 
 	float pdf;
 	RGB throughput;
+	bool source;
 };
 
 struct LightRay
