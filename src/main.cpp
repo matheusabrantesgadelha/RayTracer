@@ -85,7 +85,8 @@ int main( int argc, char** argv )
     std::cout << "RayTracer v0.1" << std::endl;
     std::cout << "Rendering scene..." << std::endl;
 
-	std::shared_ptr<BPTIlluminationSolver> solver( new BPTIlluminationSolver(4,4) );
+	std::shared_ptr<BPTIlluminationSolver> solver( new BPTIlluminationSolver(8,3) );
+//	std::shared_ptr<PTIlluminationSolver> solver( new PTIlluminationSolver(8) );
 
     SimpleCamera camera( 320, 240, 
 			std::dynamic_pointer_cast<IlluminationSolver>( solver ), 
@@ -98,8 +99,8 @@ int main( int argc, char** argv )
     std::shared_ptr<Scene> scene( new Scene() );
 
     std::shared_ptr<Sphere> light( new Sphere() );
-    light->center = glm::vec3( 0, 30, -20);
-    light->radius = 4.0f;
+    light->center = glm::vec3( 0, 38, -20);
+    light->radius = 5.0f;
     light->material->albedo = RGB(1,1,1);
     light->material->emmitance = 1.0f*RGB(1,1,1);
     light->material->power = 20.0f;

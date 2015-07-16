@@ -13,6 +13,7 @@ void BPTIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 {
 	std::list<RayHit> cameraPath;
 	PTIlluminationSolver::buildPath( cameraPathSize, _ray, _scene, cameraPath );
+	if( cameraPath.size() == 0 ) std::cout << "Error: unable to build camera path.\n";
 
 	for( auto light : _scene.lights )
 	{
@@ -22,6 +23,7 @@ void BPTIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 		DiffGeoData lightGeoData = light->getSampledDiffGeoData(lightPdf);
 		Ray initLightPathRay( lightGeoData.point, lightGeoData.normal );
 		PTIlluminationSolver::buildPath( lightPathSize, _ray, _scene, lightPath );
+		if( lightPath.size() == 0 ) std::cout << "Error: unable to build light path.\n";
 
 		RayHit sourceHit;
 		sourceHit.position = lightGeoData.point;
@@ -80,7 +82,11 @@ void BPTIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 					}
 					else
 					{
-						if( lightHit.obj->material->bxdf->isDelta() ) continue;
+						if( lightHit.obj->material->bxdf->isDelta() )
+						{
+//							_samples.push_back( std::make_tuple(RGB(0), lightHit.pdf * pathPdf ));
+							continue;
+						}
 						glm::vec3 shadowRayDirection = glm::normalize( 
 								lightHit.position - cameraHit.position);
 						Ray shadowRay( cameraHit.position, shadowRayDirection );
@@ -92,15 +98,21 @@ void BPTIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 
 							DiffGeoData lHitGeo = lightHit.obj->getDiffGeoDataAtPoint( 
 									lightHit.position );
+							DiffGeoData dHitGeo = cameraHit.obj->getDiffGeoDataAtPoint( 
+									cameraHit.position );
 							RGB radiance;
-							radiance = inRadiance * lightHit.obj->material->bxdf->radiance( 
-									lHitGeo, lightHit.incomingRadiance, -shadowRayDirection );
+							const float lcosi = AbsDot( lightHit.inDirection, -shadowRayDirection );
+							radiance = lcosi * inRadiance * lightHit.obj->material->bxdf->radiance( 
+									lHitGeo, lightHit.inDirection, -shadowRayDirection );
+							const float ccosi = AbsDot( -shadowRayDirection, cameraHit.inDirection );
+							radiance = ccosi * radiance * cameraHit.obj->material->bxdf->radiance(
+									dHitGeo, -shadowRayDirection, cameraHit.inDirection );
 							std::get<0>(sample) = radiance * pathThroughput;
 							std::get<1>(sample) = lightHit.pdf * pathPdf;
 							_samples.push_back( sample );
 						}
 						else{
-							_samples.push_back( std::make_tuple(RGB(0), lightHit.pdf * pathPdf ));
+//							_samples.push_back( std::make_tuple(RGB(0), lightHit.pdf * pathPdf ));
 						}
 					}
 				}
@@ -108,5 +120,12 @@ void BPTIlluminationSolver::estimateRadiance( Ray _ray, const Scene& _scene,
 			pathPdf *= cameraHit.pdf;
 			pathThroughput *= cameraHit.throughput;
 		}
+		if( _samples.empty() )
+		{
+			std::cout << "Camera path size: " << cameraPath.size() << std::endl;
+			std::cout << "Light path size: " << lightPath.size() << std::endl;
+			_samples.push_back( std::make_tuple( RGB(0), 1.0f ) );
+		}
 	}
+	
 }

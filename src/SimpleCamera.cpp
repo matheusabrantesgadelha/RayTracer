@@ -24,6 +24,7 @@ void SimpleCamera::render( Scene& _scene )
 			}
 //			std::cout << finalColor.r << " " << finalColor.g << " " << finalColor.b << std::endl;
 			finalColor *= 1.0f/(float) samples.size();
+			if( samples.size() == 0 ) std::cout << 0;
 
 			image.data[i][j] = finalColor;
 		}
